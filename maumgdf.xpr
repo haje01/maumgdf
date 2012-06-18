@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+    <meta>
+        <filters directoryPatterns="" filePatterns=""
+            positiveFilePatterns="" showHiddenFiles="false"/>
+        <options/>
+    </meta>
+    <projectTree name="maum.xpr">
+        <folder name="documents">
+            <file name="documents/ko/manual.xml"/>
+        </folder>
+        <folder name="examples">
+            <file name="examples/example1.xml"/>
+        </folder>
+        <folder name="schemas">
+            <file name="schemas/gdf.rng"/>
+        </folder>
+    </projectTree>
+</project>

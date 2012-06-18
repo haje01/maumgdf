@@ -1,0 +1,7 @@
+
+clean: $(LANGS)
+
+$(LANGS):
+	@cd $@ && $(MAKE) clean
+
+.PHONY: clean $(LANGS)

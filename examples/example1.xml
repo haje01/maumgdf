@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?oxygen RNGSchema="../schemas/gdf.rng" type="xml"?>
+<gdf version="0.2">
+	<!-- 이 데이터에 대한 세부정보 -->
+	<profile name="GDS">
+		<created>2010-08-11T10:50:13</created>
+		<coordinate-system distance-units="meters">
+			<cartesian orientation="Left Handed" up-axis="Y"/>
+		</coordinate-system>
+	</profile>
+
+	<!-- 골프클럽( 골프장 ) 정보 -->
+	<country-club sid="npl-country-club" updated="20110401">
+		<name xml:lang="ko">NPL 컨트리 클럽</name>
+		<name xml:lang="en">NPL Country Club</name>
+		<short-name xml:lang="ko">NPL CC</short-name>
+		<short-name xml:lang="en">NPL CC</short-name>
+		<address country-code="KR">
+			<fixed-format xml:lang="ko">
+				<state>경기도</state>
+				<city>성남시</city>
+				<street>분당구 정자동 10-3</street>
+				<postal-code>463-811</postal-code>
+			</fixed-format>
+			<fixed-format xml:lang="en">
+				<street>Jeongja-Dong, Bundang-Gu</street>
+				<city>Seongnam-Si</city>
+				<state>Gyeonggi-Do</state>
+				<postal-code>463-811</postal-code>
+			</fixed-format>
+			<!-- Alternative Way
+			<free-format>
+				<field name="state">경기도</field>
+				<field name="city">성남시</field>
+				<field name="street">분당구 정자동 10-3</field>
+				<field name="postal-code">463-811</field>
+			</free-format>			
+			-->
+		</address>
+		<contact>
+			<phone type="office">031-555-3333</phone>
+			<fax>031-601-2222</fax>
+			<email>master@nplcc.com</email>
+			<homepage>http://www.nplcc.com</homepage>
+		</contact>
+		<tee-markers>
+			<tee-marker sid="tee-marker-green">
+				<name xml:lang="ko">그린</name>
+				<name xml:lang="en">Green</name>
+				<desc xml:lang="ko">여성용 보다도 짧은 거리</desc>
+				<grade method="NPLUTO">80</grade>
+			</tee-marker>
+			<tee-marker sid="tee-marker-red">
+				<name xml:lang="ko">레드</name>
+				<name xml:lang="en">Red</name>
+				<desc xml:lang="ko">여성용</desc>
+				<grade method="NPLUTO">70</grade>
+			</tee-marker>
+			<tee-marker sid="tee-marker-white">
+				<name xml:lang="ko">화이트</name>
+				<name xml:lang="en">White</name>
+				<desc xml:lang="ko">남성용</desc>
+				<grade method="NPLUTO">30</grade>
+			</tee-marker>
+			<tee-marker sid="tee-marker-blue">
+				<name xml:lang="ko">블루</name>
+				<name xml:lang="en">Blue</name>
+				<desc xml:lang="ko">토너먼트의 챔피언쉽용</desc>
+				<grade method="NPLUTO">10</grade>
+			</tee-marker>			
+		</tee-markers>		
+		<golf-course sid="course-001" hole-count="9">
+			<name xml:lang="ko">동코스</name>
+			<tee-qualifications>
+				<tee-qualification sid="tee-qualification-green" marker="#tee-marker-green">
+					<rating>69.4</rating>
+					<slope>120</slope>
+				</tee-qualification>
+				<tee-qualification sid="tee-qualification-red" marker="#tee-marker-red">
+					<rating>70.9</rating>
+					<slope>125</slope>
+				</tee-qualification>
+				<tee-qualification sid="tee-qualification-white" marker="#tee-marker-white">
+					<rating>72.8</rating>
+					<slope>135</slope>
+				</tee-qualification>
+				<tee-qualification sid="tee-qualification-blue" marker="#tee-marker-blue">
+					<rating>73.5</rating>
+					<slope>138</slope>
+				</tee-qualification>
+			</tee-qualifications>
+			<hole sid="hole-001">
+				<green sid="green-001">
+					<hole-cup-position>10 20 3</hole-cup-position>
+				</green>
+				<green sid="green-002">
+					<hole-cup-position>20 90 8</hole-cup-position>
+				</green>
+				<tee sid="tee-001" qualification="#tee-qualification-green">
+					<par>3</par>
+					<handicap>13</handicap>
+					<route sid="route-001" green="#green-001">
+						<distance>475</distance>
+					</route>
+					<route sid="route-002" green="#green-002">
+						<distance>500</distance>
+					</route>
+				</tee>
+				<tee sid="tee-002" qualification="#tee-qualification-red">
+					<par>3</par>
+					<handicap>13</handicap>
+					<route sid="route-003" green="#green-001">
+						<distance>500</distance>
+					</route>
+					<route sid="route-004" green="#green-002">
+						<distance>520</distance>
+					</route>
+				</tee>
+				<tee sid="tee-002" qualification="#tee-qualification-white">
+					<par>4</par>
+					<handicap>15</handicap>
+					<route sid="route-003" green="#green-001">
+						<distance>510</distance>
+					</route>
+					<route sid="route-004" green="#green-002">
+						<distance>530</distance>
+					</route>
+				</tee>
+				<tee sid="tee-002" qualification="#tee-qualification-blue">
+					<par>4</par>
+					<handicap>15</handicap>
+					<route sid="route-003" green="#green-001">
+						<distance>520</distance>
+					</route>
+					<route sid="route-004" green="#green-002">
+						<distance>540</distance>
+					</route>
+				</tee>
+				<landing-area-position>30 40 50</landing-area-position>
+				<landing-area-position>15 25 35</landing-area-position>
+			</hole>
+			<hole sid="hole-002">
+				<green sid="green-003">
+					<hole-cup-position>10 20 3</hole-cup-position>
+				</green>
+				<green sid="green-004">
+					<hole-cup-position>20 90 8</hole-cup-position>
+				</green>
+				<tee sid="tee-003" qualification="#tee-qualification-green">
+					<par>3</par>
+					<handicap>13</handicap>
+					<route sid="route-005" green="#green-003">
+						<distance>475</distance>
+					</route>
+					<route sid="route-006" green="#green-004">
+						<distance>500</distance>
+					</route>
+				</tee>
+				<tee sid="tee-004" qualification="#tee-qualification-red">
+					<par>3</par>
+					<handicap>13</handicap>
+					<route sid="route-007" green="#green-003">
+						<distance>500</distance>
+					</route>
+					<route sid="route-008" green="#green-004">
+						<distance>520</distance>
+					</route>
+				</tee>
+				<tee sid="tee-004" qualification="#tee-qualification-white">
+					<par>4</par>
+					<handicap>15</handicap>
+					<route sid="route-007" green="#green-003">
+						<distance>510</distance>
+					</route>
+					<route sid="route-008" green="#green-004">
+						<distance>530</distance>
+					</route>
+				</tee>
+				<tee sid="tee-004" qualification="#tee-qualification-blue">
+					<par>4</par>
+					<handicap>15</handicap>
+					<route sid="route-007" green="#green-003">
+						<distance>520</distance>
+					</route>
+					<route sid="route-008" green="#green-004">
+						<distance>540</distance>
+					</route>
+				</tee>
+			</hole>
+			<!-- ... -->
+		</golf-course>
+	</country-club>
+
+	<!-- 플레이어 정보 -->
+	<player sid="haje01" gender="Male">
+		<full-name xml:lang="ko">
+			<first-name>정주</first-name>
+			<surname>김</surname>
+		</full-name>
+		<full-name xml:lang="en">
+			<first-name>Jeong Ju</first-name>
+			<surname>Kim</surname>
+		</full-name>
+		<date-of-birth>2010-10-10</date-of-birth>
+		<current-handicap>8.6</current-handicap>
+		<contact>
+			<email>haje01@npluto.com</email>
+		</contact>
+	</player>
+
+	<!-- 라운드 정보 -->
+	<round sid="round-001" player="#haje01" country-club="#npl-country-club">
+		<weather>Sunny</weather>
+		<start-date-time>2010-07-10T13:43:11</start-date-time>
+		<!-- 실제로는 루트 정보를 사용할 수 없는 경우에 한해 기술한다. -->
+		<reference marker="#tee-marker-green">
+			<front course="#course-001">
+				<name xml:lang="ko">동코스</name>
+			</front> 
+			<back course="#course-002">
+				<name xml:lang="ko">서코스</name>
+			</back>
+		</reference>
+		<hole-score route="#route-001">
+			<shots>6</shots>
+			<putts>2</putts>
+			<statistics>
+				<fairway-hit>True</fairway-hit>
+				<gir>False</gir>
+				<sand-save>N/A</sand-save>
+			</statistics>			
+			<shot-detail>
+				<shot>
+					<club type="driver">
+						<custom-properties>
+							<property name="brand">Taylormade</property>
+							<property name="model">r7</property>
+						</custom-properties>
+					</club>
+					<start-position>20 40 1</start-position>
+					<starting>Tee Box</starting>
+					<swing>Full Swing</swing>
+					<shot-result>Good</shot-result>
+					<flying>Straight</flying>
+					<landing>Fairway</landing>
+				</shot>
+				<shot>
+					<club type="wood" headnum="3"/>
+					<swing>Full Swing</swing>
+					<shot-result>Good</shot-result>
+					<flying>Hook</flying>
+					<landing>Fairway</landing>
+				</shot>
+				<shot>
+					<club type="iron" headnum="6"/>
+					<swing>Full Swing</swing>
+					<shot-result>Miss</shot-result>
+					<flying>Draw</flying>
+					<landing>Fairway Bunker</landing>
+				</shot>
+				<shot>
+					<club type="wedge" nickname="Sand" loftangle="48"/>
+					<swing>Toss And Roll</swing>
+					<shot-result>Good</shot-result>
+					<flying>Straight</flying>
+					<landing>Green</landing>
+				</shot>
+				<shot>
+					<club type="putter"/>
+					<swing>Toss And Roll</swing>
+					<shot-result>Good</shot-result>
+					<flying>Pull</flying>
+					<landing>Green</landing>
+				</shot>
+				<shot>
+					<club type="putter"/>
+					<swing>Toss And Roll</swing>
+					<shot-result>Good</shot-result>
+					<flying>Straight</flying>
+					<landing>Hole</landing>
+				</shot>
+			</shot-detail>
+		</hole-score>		
+		<hole-score route="#route-003">
+			<shots>1</shots>
+			<putts>0</putts>
+			<statistics>
+				<fairway-hit>True</fairway-hit>
+				<gir>False</gir>
+				<sand-save>N/A</sand-save>
+			</statistics>
+			<shot-detail>
+				<shot>
+					<club type="wedge" nickname="Sand" loftangle="50"/>
+					<swing>Full Swing</swing>
+					<shot-result>Good</shot-result>
+					<flying>Straight</flying>
+					<landing>Hole</landing>
+				</shot>
+			</shot-detail>
+		</hole-score>
+	</round>
+</gdf>

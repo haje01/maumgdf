@@ -1,0 +1,2082 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+	xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+	datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+	<start>
+		<choice>
+			<ref name="gdf"/>
+		</choice>
+	</start>
+	<define name="gdf">
+		<element name="gdf">
+			<a:documentation xml:lang="ko">GDF 포맷의 최상위 요소</a:documentation>
+			<ref name="gdf-version-attr"/>
+			<ref name="profile"/>
+			<zeroOrMore>
+				<ref name="country-club"/>
+			</zeroOrMore>
+			<zeroOrMore>
+				<ref name="player"/>
+			</zeroOrMore>
+			<zeroOrMore>
+				<ref name="round"/>
+			</zeroOrMore>
+		</element>
+	</define>
+	<define name="gdf-version-attr">
+		<attribute name="version">
+			<a:documentation xml:lang="ko">포맷 버전</a:documentation>
+			<value>0.2</value>
+		</attribute>
+	</define>
+	<define name="opt-country-club">
+		<optional>
+			<ref name="country-club"/>
+		</optional>
+	</define>
+	<define name="contact">
+		<element name="contact">
+			<a:documentation>개인 또는 단체의 연락처 정보</a:documentation>
+			<zeroOrMore>
+				<ref name="phone"/>
+			</zeroOrMore>
+			<ref name="opt-fax"/>
+			<ref name="opt-email"/>
+			<ref name="opt-homepage"/>
+		</element>
+	</define>
+	<define name="opt-homepage">
+		<optional>
+			<ref name="homepage"/>
+		</optional>
+	</define>
+	<define name="homepage">
+		<element name="homepage">
+			<a:documentation xml:lang="ko">연락처의 홈페이지 주소</a:documentation>
+			<data type="anyURI"/>
+		</element>
+	</define>
+	<define name="opt-email">
+		<optional>
+			<ref name="email"/>
+		</optional>
+	</define>
+	<define name="phone">
+		<element name="phone">
+			<a:documentation xml:lang="ko">연락처의 전화 정보</a:documentation>
+			<ref name="phone-type-attr"/>
+			<text/>
+		</element>
+	</define>
+	<define name="opt-fax">
+		<optional>
+			<ref name="fax"/>
+		</optional>
+	</define>
+	<define name="fax">
+		<element name="fax">
+			<a:documentation xml:lang="ko">연락처의 팩스 정보</a:documentation>
+			<text/>
+		</element>
+	</define>
+	<define name="phone-type-attr">
+		<attribute name="type">
+			<a:documentation xml:lang="ko">전화의 종류</a:documentation>
+			<choice>
+				<value>mobile</value>
+				<value>office</value>
+				<value>home</value>
+			</choice>
+		</attribute>
+	</define>
+	<define name="email">
+		<element name="email">
+			<a:documentation xml:lang="ko">이메일 주소.</a:documentation>
+			<ref name="email-type"/>
+		</element>
+	</define>
+	<define name="email-type">
+		<a:documentation>개인 또는 단체의 이메일 주소 정보</a:documentation>
+		<data type="string">
+			<param name="pattern">[\w\d\.]+@[\w\d]{1}[\w\d\.]+[\w\d]</param>
+		</data>
+	</define>
+	<define name="date-type">
+		<a:documentation>버전관리 등을 위해 사용하는 일자 정보. '20100401' 처럼 연(4자), 월(2자), 일(2자)의 순서로 전체 8자로 기술한다.</a:documentation>
+		<data type="string">
+			<param name="pattern">\d{8}</param>
+		</data>
+	</define>
+	<define name="country-club">
+		<element name="country-club">
+			<a:documentation xml:lang="ko">컨트리클럽( 골프장 ) 정보.</a:documentation>
+			<ref name="sid-attr"/>
+			<ref name="opt-updated-attr"/>
+			<ref name="names"/>
+			<zeroOrMore>
+				<ref name="short-name"/>
+			</zeroOrMore>
+			<ref name="address"/>
+			<ref name="contact"/>
+			<ref name="tee-markers"/>
+			<oneOrMore>
+				<ref name="golf-course"/>
+			</oneOrMore>
+			<ref name="opt-custom-properties"/>
+		</element>
+	</define>
+	<define name="short-name">
+		<element name="short-name">
+			<a:documentation xml:lang="ko">간략하게 사용하기 위한 짧은 이름</a:documentation>
+			<ref name="opt-xml-lang-attr"/>
+			<text/>
+		</element>
+	</define>
+	<define name="opt-coordinate-system">
+		<optional>
+			<ref name="coordinate-system"/>
+		</optional>
+	</define>
+	<define name="coordinate-system">
+		<element name="coordinate-system">
+			<a:documentation xml:lang="ko">골프장에서 사용하는 좌표계 정보. 자식요소에 따라 좌표계 타입이 결정된다.</a:documentation>
+			<ref name="distance-units-attr"/>
+			<choice>
+				<ref name="cartesian"/>
+				<ref name="geographic"/>
+			</choice>
+		</element>
+	</define>
+	<define name="profile">
+		<element name="profile">
+			<a:documentation xml:lang="ko">프로파일 요소는 데이터 별로 차이가 나는 요소를 위한 세부정보를 담는다.</a:documentation>
+			<ref name="name-attr"/>
+			<ref name="created"/>
+			<ref name="opt-coordinate-system"/>
+			<ref name="opt-custom-properties"/>
+		</element>
+	</define>
+	<define name="tee-markers">
+		<element name="tee-markers">
+			<a:documentation xml:lang="ko">티의 난이도 분류를 위한 마커 리스트</a:documentation>
+			<oneOrMore>
+				<ref name="tee-marker"/>
+			</oneOrMore>
+		</element>
+	</define>
+	<define name="tee-marker">
+		<element name="tee-marker">
+			<a:documentation xml:lang="ko">티의 마커 정보</a:documentation>
+			<ref name="sid-attr"/>
+			<ref name="names"/>
+			<ref name="descs"/>
+			<zeroOrMore>
+				<ref name="tee-grade"/>
+			</zeroOrMore>
+		</element>
+	</define>
+	<define name="tee-grade">
+		<element name="grade">
+			<a:documentation xml:lang="ko">티의 등급 분류. 골프장 별로 서로 다른 티 마커를 사용할 때에도 공통적인 통계가 가능하도록 해준다. method 속성에서 선언된 방식에 따라 기술한다.</a:documentation>
+			<ref name="method-attr"/>
+			<text/>
+		</element>
+	</define>
+	<define name="method-attr">
+		<attribute name="method">
+			<a:documentation xml:lang="ko">사용할 방식의 이름</a:documentation>
+			<text/>
+		</attribute>
+	</define>
+	<define name="descs">
+		<oneOrMore>
+			<ref name="desc"/>
+		</oneOrMore>
+	</define>
+	<define name="desc">
+		<element name="desc">
+			<a:documentation xml:lang="ko">마커에 대한 설명</a:documentation>
+			<ref name="opt-xml-lang-attr"/>
+			<text/>
+		</element>
+	</define>
+	<define name="marker-name-attr">
+		<attribute name="name">
+			<a:documentation xml:lang="ko">티 마커 이름 속성</a:documentation>
+			<ref name="marker-type"/>
+		</attribute>
+	</define>
+	<define name="created">
+		<element name="created">
+			<a:documentation xml:lang="ko">이 데이터가 생성된 일시</a:documentation>
+			<data type="dateTime"/>
+		</element>
+	</define>
+	<define name="name-attr">
+		<attribute name="name">
+			<a:documentation xml:lang="ko">프로파일의 이름 속성. 데이터를 생성한 서비스나 어플리케이션의 이름 등을 기술한다.</a:documentation>
+			<text/>
+		</attribute>
+	</define>
+	<define name="cartesian">
+		<element name="cartesian">
+			<a:documentation xml:lang="ko">직교좌표계를 사용함을 선언. X, Y, Z 순서로 표기. 실제 지형이 아닌 가상의 코스용으로 사용.</a:documentation>
+			<ref name="orientation-attr"/>
+			<ref name="up-axis-attr"/>
+		</element>
+	</define>
+	<define name="orientation-attr">
+		<attribute name="orientation">
+			<a:documentation xml:lang="ko">직교좌표계의 방향</a:documentation>
+			<choice>
+				<value>Right Handed</value>
+				<a:documentation xml:lang="ko">오른손 좌표계</a:documentation>
+				<value>Left Handed</value>
+				<a:documentation xml:lang="ko">왼손 좌표계</a:documentation>
+			</choice>
+		</attribute>
+	</define>
+	<define name="up-axis-attr">
+		<attribute name="up-axis">
+			<a:documentation xml:lang="ko">좌표계의 위쪽을 가리키는 축</a:documentation>
+			<choice>
+				<value>X</value>
+				<a:documentation xml:lang="ko">X축이 위쪽</a:documentation>
+				<value>Y</value>
+				<a:documentation xml:lang="ko">Y축이 위쪽</a:documentation>
+				<value>Z</value>
+				<a:documentation xml:lang="ko">Z축이 위쪽</a:documentation>
+			</choice>
+		</attribute>
+	</define>
+	<define name="geographic">
+		<element name="geographic">
+			<a:documentation xml:lang="ko">지리 좌표계를 사용함을 선언. 위도( Latitude ), 경도( Longitude ), 고도(
+				Altitude ) 순서로 표기. 실제 지형에서 위치를 나타낼 때 사용</a:documentation>
+			<ref name="opt-gpstype-attr"/>
+		</element>
+	</define>
+	<define name="opt-gpstype-attr">
+		<optional>
+			<ref name="gpstype-attr"/>
+		</optional>
+	</define>
+	<define name="gpstype-attr">
+		<attribute name="gpstype">
+			<a:documentation xml:lang="ko">GPS에서 사용하는 좌표계</a:documentation>
+			<choice>
+				<value>WGS84</value>
+				<value>GRS80</value>
+			</choice>
+		</attribute>
+	</define>
+	<define name="names">
+		<oneOrMore>
+			<ref name="name"/>
+		</oneOrMore>
+	</define>
+	<define name="distance-units-attr">
+		<attribute name="distance-units">
+			<a:documentation xml:lang="ko">골프장에서 사용하는 거리의 단위</a:documentation>
+			<choice>
+				<value>meters</value>
+				<a:documentation>미터 단위</a:documentation>
+				<value>yards</value>
+				<a:documentation>야드 단위</a:documentation>
+			</choice>
+		</attribute>
+	</define>
+	<define name="name">
+		<element name="name">
+			<a:documentation xml:lang="ko">이름</a:documentation>
+			<ref name="opt-xml-lang-attr"/>
+			<text/>
+		</element>
+	</define>
+	<define name="player-sid-attr">
+		<attribute name="sid">
+			<a:documentation xml:lang="ko">플레이어의 SID</a:documentation>
+			<ref name="sid-type"/>
+		</attribute>
+	</define>
+	<define name="opt-updated-attr">
+		<optional>
+			<ref name="updated-attr"/>
+		</optional>
+	</define>
+	<define name="updated-attr">
+		<attribute name="updated">
+			<a:documentation xml:lang="ko">골프장의 업데이트 일자. 데이터의 버전 관리 용도로 사용한다.</a:documentation>
+			<ref name="date-type"/>
+		</attribute>
+	</define>
+	<define name="round-player-attr">
+		<attribute name="player">
+			<a:documentation xml:lang="ko">라운딩을 한 플레이어 SID 참조</a:documentation>
+			<ref name="sid-ref-type"/>
+		</attribute>
+	</define>
+	<define name="address">
+		<element name="address">
+			<a:documentation xml:lang="ko">골프장이나 플레이어의 주소 정보</a:documentation>
+			<ref name="country-code-attr"/>
+			<choice>
+				<ref name="fixed-formats"/>
+				<ref name="free-formats"/>
+			</choice>
+		</element>
+	</define>
+	<define name="fixed-formats">
+		<oneOrMore>
+			<ref name="fixed-format"/>
+		</oneOrMore>
+	</define>
+	<define name="free-formats">
+		<oneOrMore>
+			<ref name="free-format"/>
+		</oneOrMore>
+	</define>
+	<define name="fixed-format">
+		<element name="fixed-format">
+			<a:documentation xml:lang="ko">고정된 형식의 주소 포맷</a:documentation>
+			<interleave>
+				<ref name="opt-xml-lang-attr"/>
+				<ref name="state"/>
+				<ref name="city"/>
+				<ref name="street"/>
+				<ref name="postal-code"/>
+			</interleave>
+		</element>
+	</define>
+	<define name="free-format">
+		<element name="free-format">
+			<a:documentation xml:lang="ko">자유로운 형식의 주소 포맷</a:documentation>
+			<ref name="opt-xml-lang-attr"/>
+			<oneOrMore>
+				<ref name="address-field"/>
+			</oneOrMore>
+		</element>
+	</define>
+	<define name="address-field">
+		<element name="field">
+			<a:documentation xml:lang="ko">주소의 필드를 나타낸다.</a:documentation>
+			<ref name="opt-xml-lang-attr"/>
+			<ref name="address-field-name-attr"/>
+			<text/>
+		</element>
+	</define>
+	<define name="address-field-name-attr">
+		<attribute name="name">
+			<a:documentation xml:lang="ko">주소 필드 이름. 용도에 맞게 자유롭게 분류하여 기술한다.</a:documentation>
+			<text/>
+		</attribute>
+	</define>
+	<define name="opt-xml-lang-attr">
+		<optional>
+			<ref name="xml-lang-attr"/>
+		</optional>
+	</define>
+	<define name="xml-lang-attr">
+		<attribute name="xml:lang">
+			<a:documentation xml:lang="ko">다중언어 요소를 위한 ISO 639-1 언어코드 속성</a:documentation>
+			<ref name="language-code-TYPE"/>
+		</attribute>
+	</define>
+	<define name="state">
+		<element name="state">
+			<a:documentation xml:lang="ko">주소의 주(州) 이름</a:documentation>
+			<ref name="opt-xml-lang-attr"/>
+			<text/>
+		</element>
+	</define>
+	<define name="city">
+		<element name="city">
+			<a:documentation xml:lang="ko">주소의 도시 이름</a:documentation>
+			<text/>
+		</element>
+	</define>
+	<define name="street">
+		<element name="street">
+			<a:documentation xml:lang="ko">주소의 거리 정보</a:documentation>
+			<text/>
+		</element>
+	</define>
+	<define name="postal-code">
+		<element name="postal-code">
+			<a:documentation xml:lang="ko">주소의 우편번호 정보</a:documentation>
+			<text/>
+		</element>
+	</define>
+	<define name="country-code-attr">
+		<attribute name="country-code">
+			<a:documentation xml:lang="ko">ISO 3166 표준에 의한 국가 코드</a:documentation>
+			<ref name="country-code-TYPE"/>
+		</attribute>
+	</define>
+	<define name="golf-course">
+		<element name="golf-course">
+			<a:documentation xml:lang="ko">골프코스정보</a:documentation>
+			<ref name="sid-attr"/>
+			<ref name="hole-count-attr"/>
+			<ref name="names"/>
+			<a:documentation>골프코스의 이름</a:documentation>
+			<ref name="tee-qualifications"/>
+			<oneOrMore>
+				<ref name="hole"/>
+			</oneOrMore>
+		</element>
+	</define>
+	<define name="tee-qualifications">
+		<element name="tee-qualifications">
+			<a:documentation xml:lang="ko">티평가 리스트</a:documentation>
+			<ref name="opt-org-name"/>
+			<oneOrMore>
+				<ref name="tee-qualification"/>
+			</oneOrMore>
+		</element>
+	</define>
+	<define name="hole">
+		<element name="hole">
+			<a:documentation xml:lang="ko">골프코스내의 홀에 관한 정보를 정의한다.</a:documentation>
+			<ref name="sid-attr"/>
+			<oneOrMore>
+				<ref name="green"/>
+			</oneOrMore>
+			<oneOrMore>
+				<ref name="tee"/>
+			</oneOrMore>
+			<zeroOrMore>
+				<ref name="landing-area-position"/>
+			</zeroOrMore>
+		</element>
+	</define>
+	<define name="landing-area-position">
+		<element name="landing-area-position">
+			<a:documentation xml:lang="ko">파4 이상의 홀에서 티샷, 세컨샷 후의 적절한 볼의 위치. IP( Intercross-section point ) 혹은 Angel point 라고도 불린다.</a:documentation>
+			<ref name="vector3-type"/>
+		</element>
+	</define>
+	<define name="green">
+		<element name="green">
+			<a:documentation xml:lang="ko">골프코스의 홀 안에 있는 그린에 대한 정보</a:documentation>
+			<ref name="sid-attr"/>
+			<ref name="opt-hole-cup-position"/>
+		</element>
+	</define>
+	<define name="opt-hole-cup-position">
+		<optional>
+			<ref name="hole-cup-position"/>
+		</optional>
+	</define>
+	<define name="hole-cup-position">
+		<element name="hole-cup-position">
+			<ref name="vector3-type"/>
+		</element>
+	</define>
+	<define name="start-position">
+		<element name="start-position">
+			<a:documentation xml:lang="ko">골프장에 선언된 좌표계에 따라 시작 위치를 나타낼 때 사용한다.</a:documentation>
+			<ref name="vector3-type"/>
+		</element>
+	</define>
+	<define name="position">
+		<element name="position">
+			<a:documentation xml:lang="ko">골프장에 선언된 좌표계에 따라 위치를 나타낼 때 사용한다.</a:documentation>
+			<ref name="vector3-type"/>
+		</element>
+	</define>
+	<define name="vector3-type">
+		<a:documentation xml:lang="ko">실수 3개로 구성된 좌표 타입. 숫자간 구분은 스페이스로 하며, 내용의 앞과 뒤에 여백이 있어서는 안된다.</a:documentation>
+		<data type="string">
+			<param name="pattern"
+			>\-?[0-9]+(\.[0-9]*)?\s+\-?[0-9]+(\.[0-9]*)?\s+\-?[0-9]+(\.[0-9]*)?</param>
+		</data>
+	</define>
+	<define name="hole-count-attr">
+		<attribute name="hole-count">
+			<a:documentation>골프코스에 속한 홀의 갯수</a:documentation>
+			<data type="unsignedInt"/>
+		</attribute>
+	</define>
+	<define name="tee-qualification">
+		<element name="tee-qualification">
+			<a:documentation xml:lang="ko">골프코스의 티에 대한 평가도</a:documentation>
+			<ref name="sid-attr"/>
+			<ref name="marker-ref-attr"/>
+			<ref name="rating"/>
+			<ref name="opt-slope"/>
+		</element>
+	</define>
+	<define name="rating">
+		<element name="rating">
+			<a:documentation xml:lang="ko">티의 난이도를 평가한 파( Par ) 값</a:documentation>
+			<data type="float"/>
+		</element>
+	</define>
+	<define name="opt-slope">
+		<optional>
+			<ref name="slope"/>
+		</optional>
+	</define>
+	<define name="slope">
+		<element name="slope">
+			<a:documentation xml:lang="ko">골프코스의 티에 대한 슬로프레이팅</a:documentation>
+			<data type="float"/>
+		</element>
+	</define>
+	<define name="opt-org-name">
+		<optional>
+			<ref name="org-names"/>
+		</optional>
+	</define>
+	<define name="org-names">
+		<oneOrMore>
+			<ref name="org-name"/>
+		</oneOrMore>
+	</define>
+	<define name="org-name">
+		<element name="org-name">
+			<a:documentation xml:lang="ko">티평가를 한 단체 이름</a:documentation>
+			<ref name="opt-xml-lang-attr"/>
+			<text/>
+		</element>
+	</define>
+	<define name="tee">
+		<element name="tee">
+			<a:documentation xml:lang="ko">홀내의 티 정보</a:documentation>
+			<ref name="sid-attr"/>
+			<ref name="tee-qualification-ref-attr"/>
+			<ref name="par"/>
+			<ref name="handicap"/>
+			<oneOrMore>
+				<ref name="route"/>
+			</oneOrMore>
+			<ref name="opt-position"/>
+		</element>
+	</define>
+	<define name="tee-qualification-ref-attr">
+		<attribute name="qualification">
+			<a:documentation xml:lang="ko">티 평가에 대한 참조</a:documentation>
+			<ref name="sid-ref-type"/>
+		</attribute>
+	</define>
+	<define name="marker-ref-attr">
+		<attribute name="marker">
+			<a:documentation xml:lang="ko">티 마커에 대한 참조</a:documentation>
+			<ref name="sid-ref-type"/>
+		</attribute>
+	</define>
+	<define name="marker-type">
+		<a:documentation xml:lang="ko">티의 마커용 타입. 시작은 영문자로, 나머지는 영문자, 숫자, - . _ 문자를 섞어서 표기한다.</a:documentation>
+		<data type="string">
+			<param name="pattern">[a-zA-Z][a-zA-Z0-9\-\._/]+</param>
+		</data>
+	</define>
+	<define name="route">
+		<element name="route">
+			<ref name="sid-attr"/>
+			<ref name="green-ref-attr"/>
+			<ref name="distance"/>
+		</element>
+	</define>
+	<define name="green-ref-attr">
+		<attribute name="green">
+			<ref name="sid-ref-type"/>
+		</attribute>
+	</define>
+	<define name="opt-start-position">
+		<optional>
+			<ref name="start-position"/>
+		</optional>
+	</define>
+	<define name="opt-position">
+		<optional>
+			<ref name="position"/>
+		</optional>
+	</define>
+	<define name="distance">
+		<element name="distance">
+			<a:documentation xml:lang="ko">티에서 홀까지의 거리</a:documentation>
+			<data type="float"/>
+		</element>
+	</define>
+	<define name="par">
+		<element name="par">
+			<a:documentation xml:lang="ko">티의 파값.</a:documentation>
+			<choice>
+				<value>3</value>
+				<a:documentation xml:lang="ko">파3 홀</a:documentation>
+				<value>4</value>
+				<a:documentation xml:lang="ko">파4 홀</a:documentation>
+				<value>5</value>
+				<a:documentation xml:lang="ko">파5 홀</a:documentation>
+				<value>6</value>
+				<a:documentation xml:lang="ko">파6 홀</a:documentation>
+				<value>7</value>
+				<a:documentation xml:lang="ko">파7 홀</a:documentation>
+			</choice>
+		</element>
+	</define>
+	<define name="handicap">
+		<element name="handicap">
+			<a:documentation xml:lang="ko">티의 핸디캡. 제일 어려운 것부터 제일 쉬운 것까지 1에서 18까지의 숫자로 표시한다.</a:documentation>
+			<choice>
+				<value>1</value>
+				<a:documentation xml:lang="ko">1번 ( 제일 어려움 )</a:documentation>
+				<value>2</value>
+				<a:documentation xml:lang="ko">2번</a:documentation>
+				<value>3</value>
+				<a:documentation xml:lang="ko">3번</a:documentation>
+				<value>4</value>
+				<a:documentation xml:lang="ko">4번</a:documentation>
+				<value>5</value>
+				<a:documentation xml:lang="ko">5번</a:documentation>
+				<value>6</value>
+				<a:documentation xml:lang="ko">6번</a:documentation>
+				<value>7</value>
+				<a:documentation xml:lang="ko">7번</a:documentation>
+				<value>8</value>
+				<a:documentation xml:lang="ko">8번</a:documentation>
+				<value>9</value>
+				<a:documentation xml:lang="ko">9번</a:documentation>
+				<value>10</value>
+				<a:documentation xml:lang="ko">10번</a:documentation>
+				<value>11</value>
+				<a:documentation xml:lang="ko">11번</a:documentation>
+				<value>12</value>
+				<a:documentation xml:lang="ko">12번</a:documentation>
+				<value>13</value>
+				<a:documentation xml:lang="ko">13번</a:documentation>
+				<value>14</value>
+				<a:documentation xml:lang="ko">14번</a:documentation>
+				<value>15</value>
+				<a:documentation xml:lang="ko">15번</a:documentation>
+				<value>16</value>
+				<a:documentation xml:lang="ko">16번</a:documentation>
+				<value>17</value>
+				<a:documentation xml:lang="ko">17번</a:documentation>
+				<value>18</value>
+				<a:documentation xml:lang="ko">18번 (제일 쉬움 )</a:documentation>
+			</choice>
+		</element>
+	</define>
+	<define name="opt-player">
+		<optional>
+			<ref name="player"/>
+		</optional>
+	</define>
+	<define name="opt-address">
+		<optional>
+			<ref name="address"/>
+		</optional>
+	</define>
+	<define name="player">
+		<element name="player">
+			<a:documentation xml:lang="ko">골프 플레이어에 관한 정보.</a:documentation>
+			<ref name="sid-attr"/>
+			<choice>
+				<ref name="names"/>
+				<ref name="full-names"/>
+			</choice>
+			<ref name="player-gender-attr"/>
+			<ref name="date-of-birth"/>
+			<ref name="current-handicap"/>
+			<ref name="opt-address"/>
+			<ref name="contact"/>
+			<ref name="opt-home-country-club"/>
+			<ref name="opt-custom-properties"/>
+		</element>
+	</define>
+	<define name="sid-attr">
+		<attribute name="sid">
+			<a:documentation xml:lang="ko">SID 속성</a:documentation>
+			<ref name="sid-type"/>
+		</attribute>
+	</define>
+	<define name="sid-type">
+		<a:documentation xml:lang="ko">Simple ID 형. 시작은 영문자로, 나머지는 영어와 숫자 그리고 - . _ 문자로 구성된 간이 ID이다.</a:documentation>
+		<data type="string">
+			<param name="pattern">[a-zA-Z][a-zA-Z0-9\-\._/]+</param>
+		</data>
+	</define>
+	<define name="sid-ref-type">
+		<a:documentation xml:lang="ko">Simple ID 참조형. 영어와 숫자 그리고 - . _ 문자로만 구성된 간이 ID를 참조할 때 사용된다.
+			원래 SID앞에 '#'을 붙여서 사용하는 것에 주의</a:documentation>
+		<data type="string">
+			<param name="pattern">([a-zA-Z0-9]+([a-zA-Z0-9_.]+)+)?#[a-zA-Z][a-zA-Z0-9\-\._/]+</param>
+		</data>
+	</define>
+	<define name="full-names">
+		<oneOrMore>
+			<ref name="full-name"/>
+		</oneOrMore>
+	</define>
+	<define name="opt-full-name">
+		<optional>
+			<ref name="full-name"/>
+		</optional>
+	</define>
+	<define name="full-name">
+		<element name="full-name">
+			<a:documentation xml:lang="ko">성과 이름을 구분한 풀네임</a:documentation>
+			<ref name="opt-xml-lang-attr"/>
+			<interleave>
+				<ref name="surname"/>
+				<ref name="first-name"/>
+			</interleave>
+		</element>
+	</define>
+	<define name="first-name">
+		<element name="first-name">
+			<a:documentation xml:lang="ko">이름에서 성을 제외한 부분</a:documentation>
+			<text/>
+		</element>
+	</define>
+	<define name="surname">
+		<element name="surname">
+			<a:documentation xml:lang="ko">이름의 성</a:documentation>
+			<text/>
+		</element>
+	</define>
+	<define name="current-handicap">
+		<element name="current-handicap">
+			<a:documentation xml:lang="ko">플레이어의 현재 핸디캡.</a:documentation>
+			<data type="float"/>
+		</element>
+	</define>
+	<define name="player-gender-attr">
+		<attribute name="gender">
+			<a:documentation xml:lang="ko">플레이어 성별 정보.</a:documentation>
+			<choice>
+				<value>Male</value>
+				<a:documentation xml:lang="ko">남성</a:documentation>
+				<value>Female</value>
+				<a:documentation xml:lang="ko">여성</a:documentation>
+			</choice>
+		</attribute>
+	</define>
+	<define name="date-of-birth">
+		<element name="date-of-birth">
+			<a:documentation xml:lang="ko">플레이어의 생일.</a:documentation>
+			<data type="date"/>
+		</element>
+	</define>
+	<define name="opt-home-country-club">
+		<optional>
+			<ref name="home-country-club"/>
+		</optional>
+	</define>
+	<define name="home-country-club">
+		<element name="home-country-club">
+			<a:documentation xml:lang="ko">플레이어의 출신 골프장.</a:documentation>
+			<ref name="name"/>
+		</element>
+	</define>
+	<define name="round">
+		<element name="round">
+			<a:documentation xml:lang="ko">한명의 플레이어의 라운딩 결과.</a:documentation>
+			<ref name="sid-attr"/>
+			<ref name="round-player-attr"/>
+			<ref name="country-club-attr"/>
+			<ref name="opt-weather"/>
+			<ref name="start-date-time"/>
+			<ref name="opt-end-date-time"/>
+			<ref name="opt-round-reference"/>
+			<oneOrMore>
+				<ref name="hole-score"/>
+			</oneOrMore>
+			<ref name="opt-note"/>
+			<ref name="opt-custom-properties"/>
+		</element>
+	</define>
+	<define name="opt-round-reference">
+		<optional>
+			<ref name="round-reference"/>
+		</optional>
+	</define>
+	<define name="round-reference">
+		<element name="reference">
+			<a:documentation xml:lang="ko">라운드 정보에서 루트가 없을 때를 위한 참조 정보</a:documentation>
+			<ref name="marker-ref-attr"/>
+			<ref name="opt-round-front-course"/>
+			<ref name="opt-round-back-course"/>
+		</element>
+	</define>
+	<define name="opt-round-front-course">
+		<optional>
+			<ref name="round-front-course"/>
+		</optional>
+	</define>
+	<define name="opt-round-back-course">
+		<optional>
+			<ref name="round-back-course"/>
+		</optional>
+	</define>
+	<define name="round-front-course">
+		<element name="front">
+			<a:documentation xml:lang="ko">라운드 레퍼런스에서 전 코스 정보</a:documentation>
+			<ref name="course-ref-attr"/>
+			<ref name="opt-names"/>
+		</element>
+	</define>
+	<define name="round-back-course">
+		<element name="back">
+			<a:documentation xml:lang="ko">라운드 레퍼런스에서 후 코스 정보</a:documentation>
+			<ref name="course-ref-attr"/>
+			<ref name="opt-names"/>
+		</element>
+	</define>
+	<define name="opt-names">
+		<optional>
+			<ref name="names"/>
+		</optional>
+	</define>
+	<define name="course-ref-attr">
+		<attribute name="course">
+			<a:documentation xml:lang="ko">골프 코스에 대한 참조</a:documentation>
+			<ref name="sid-ref-type"/>
+		</attribute>
+	</define>
+	<define name="opt-marker-ref-attr">
+		<optional>
+			<ref name="marker-ref-attr"/>
+		</optional>
+	</define>
+	<define name="opt-weather">
+		<optional>
+			<ref name="weather"/>
+		</optional>
+	</define>
+	<define name="weather">
+		<element name="weather">
+			<choice>
+				<value>Sunny</value>
+				<a:documentation xml:lang="ko">화창한 날씨</a:documentation>
+				<value>Partly Cloudy</value>
+				<a:documentation xml:lang="ko">부분적으로 흐린 날씨</a:documentation>
+				<value>Cloudy</value>
+				<a:documentation xml:lang="ko">흐린 날씨</a:documentation>
+				<value>Rainy</value>
+				<a:documentation xml:lang="ko">비온 날씨</a:documentation>
+				<value>Snowy</value>
+				<a:documentation xml:lang="ko">눈온 날씨</a:documentation>
+				<value>Misty</value>
+				<a:documentation xml:lang="ko">안개낀 날씨</a:documentation>
+				<value>Cold</value>
+				<a:documentation xml:lang="ko">추운 날씨</a:documentation>
+			</choice>
+		</element>
+	</define>
+	<define name="opt-note">
+		<optional>
+			<ref name="notes"/>
+		</optional>
+	</define>
+	<define name="notes">
+		<oneOrMore>
+			<ref name="note"/>
+		</oneOrMore>
+	</define>
+	<define name="note">
+		<element name="note">
+			<a:documentation xml:lang="ko">라운딩 노트</a:documentation>
+			<ref name="opt-xml-lang-attr"/>
+			<text/>
+		</element>
+	</define>
+	<define name="country-club-attr">
+		<attribute name="country-club">
+			<a:documentation xml:lang="ko">컨트리클럽( 골프장 ) SID 참조</a:documentation>
+			<ref name="sid-ref-type"/>
+		</attribute>
+	</define>
+	<define name="start-date-time">
+		<element name="start-date-time">
+			<a:documentation xml:lang="ko">라운딩 시작 일시.</a:documentation>
+			<data type="dateTime"/>
+		</element>
+	</define>
+	<define name="opt-end-date-time">
+		<optional>
+			<ref name="end-date-time"/>
+		</optional>
+	</define>
+	<define name="end-date-time">
+		<element name="end-date-time">
+			<a:documentation xml:lang="ko">라운딩 종료 일시.</a:documentation>
+			<data type="dateTime"/>
+		</element>
+	</define>
+	<define name="hole-score">
+		<element name="hole-score">
+			<a:documentation xml:lang="ko">이번 라운드의 홀별 스코어</a:documentation>
+			<ref name="opt-route-attr"/>
+			<ref name="shots"/>
+			<ref name="putts"/>
+			<ref name="statistics"/>
+			<ref name="opt-shot-detail"/>
+		</element>
+	</define>
+	<define name="hole-attr">
+		<attribute name="hole">
+			<ref name="sid-ref-type"/>
+		</attribute>
+	</define>
+	<define name="opt-route-attr">
+		<optional>
+			<ref name="route-attr"/>
+		</optional>
+	</define>
+	<define name="route-attr">
+		<attribute name="route">
+			<ref name="sid-ref-type"/>
+		</attribute>
+	</define>
+	<define name="shots">
+		<element name="shots">
+			<a:documentation xml:lang="ko">이번 홀에서 샷 수.</a:documentation>
+			<data type="unsignedInt"/>
+		</element>
+	</define>
+	<define name="putts">
+		<element name="putts">
+			<a:documentation xml:lang="ko">이번 홀에서 퍼팅 수.</a:documentation>
+			<data type="unsignedInt"/>
+		</element>
+	</define>
+	<define name="statistics">
+		<element name="statistics">
+			<a:documentation xml:lang="ko">이번 홀의 통계. 샷 세부정보로 부터 판단되어 질 수 있으나, 편의상 산출되어 포함한다.</a:documentation>
+			<ref name="fairway-hit"/>
+			<ref name="gir"/>
+			<ref name="opt-sand-save"/>
+		</element>
+	</define>
+	<define name="opt-sand-save">
+		<optional>
+			<ref name="sand-save"/>
+		</optional>
+	</define>
+	<define name="sand-save">
+		<element name="sand-save">
+			<a:documentation xml:lang="ko">그린사이드 벙커샷으로 온그린한 후, 1퍼팅으로 파를 잡았는지 여부</a:documentation>
+			<ref name="tribool-type"/>
+		</element>
+	</define>
+	<define name="club-type">
+		<a:documentation xml:lang="ko">클럽의 타입</a:documentation>
+		<choice>				
+			<value>driver</value>
+			<a:documentation xml:lang="ko">드라이버 클럽</a:documentation>
+			<value>wood</value>
+			<a:documentation xml:lang="ko">우드 클럽</a:documentation>
+			<value>hybrid</value>
+			<a:documentation xml:lang="ko">하이브리드 클럽</a:documentation>
+			<value>iron</value>
+			<a:documentation xml:lang="ko">아이언 클럽</a:documentation>
+			<value>wedge</value>
+			<a:documentation xml:lang="ko">웨지 클럽</a:documentation>
+			<value>putter</value>
+			<a:documentation xml:lang="ko">퍼터 클럽</a:documentation>
+		</choice>
+	</define>
+	<define name="tribool-type">
+		<a:documentation xml:lang="ko">참, 거짓, 지원 않음의 세가지 상태를 가지는 타입</a:documentation>
+		<choice>
+			<value>True</value>
+			<a:documentation xml:lang="ko">참</a:documentation>
+			<value>False</value>
+			<a:documentation xml:lang="ko">거짓</a:documentation>
+			<value>N/A</value>
+			<a:documentation xml:lang="ko">지원하지 않거나 설정되지 않음</a:documentation>
+		</choice>
+	</define>
+	<define name="fairway-hit">
+		<element name="fairway-hit">
+			<a:documentation xml:lang="ko">이 홀의 첫번째 샷이 페어웨이에 안착했는지 여부.</a:documentation>
+			<ref name="tribool-type"/>
+		</element>
+	</define>
+	<define name="gir">
+		<element name="gir">
+			<a:documentation xml:lang="ko">기준타수 - 2타 내에 그린에 들어갔는지 여부</a:documentation>
+			<ref name="tribool-type"/>
+		</element>
+	</define>
+	<define name="opt-shot-detail">
+		<optional>
+			<ref name="shot-detail"/>
+		</optional>
+	</define>
+	<define name="shot-detail">
+		<element name="shot-detail">
+			<a:documentation xml:lang="ko">이번 홀에서 샷 상세정보. 개별 샷 요소들을 가진다.</a:documentation>
+			<oneOrMore>
+				<ref name="shot"/>
+			</oneOrMore>
+		</element>
+	</define>
+	<define name="shot">
+		<element name="shot">
+			<a:documentation xml:lang="ko">라운딩 시 개별 샷 정보.</a:documentation>
+			<ref name="club"/>
+			<ref name="opt-start-position"/>
+			<ref name="opt-starting"/>
+			<ref name="swing"/>
+			<ref name="shot-result"/>
+			<ref name="flying"/>
+			<ref name="landing"/>
+			<ref name="opt-penalty"/>
+		</element>
+	</define>
+	<define name="opt-penalty">
+		<optional>
+			<ref name="penalty"/>
+		</optional>
+	</define>
+	<define name="penalty">
+		<element name="penalty">
+			<a:documentation xml:lang="ko">벌타를 받은 경우 갯수 ( 로컬 게임 룰에서 사용할 수 있다 )</a:documentation>
+			<data type="unsignedInt"/>
+		</element>
+	</define>
+	<define name="opt-starting">
+		<optional>
+			<ref name="starting"/>
+		</optional>
+	</define>
+	<define name="starting">
+		<element name="starting">
+			<a:documentation xml:lang="ko">샷 정보에서 공이 시작한 위치 ( 생략 가능하나 이전 샷이 OB나 Lost Ball 등인 경우
+				필요하다. ) </a:documentation>
+			<ref name="ball-pos-type"/>
+		</element>
+	</define>
+	<define name="opt-swing">
+		<optional>
+			<ref name="swing"/>
+		</optional>
+	</define>
+	<define name="swing">
+		<element name="swing">
+			<a:documentation xml:lang="ko">샷 정보에서 스윙 타입 ( 클럽 별 비거리 통계등을 산출 할때 유용 )</a:documentation>
+			<choice>
+				<value>Full Swing</value>
+				<a:documentation xml:lang="ko">풀스윙</a:documentation>
+				<value>Shoot</value>
+				<a:documentation xml:lang="ko">슛</a:documentation>
+				<value>Pass</value>
+				<a:documentation xml:lang="ko">패스</a:documentation>
+				<value>Toss And Roll</value>
+				<a:documentation xml:lang="ko">낮게 던져 굴리기</a:documentation>
+				<value>Putt</value>
+				<a:documentation xml:lang="ko">퍼트</a:documentation>
+			</choice>
+		</element>
+	</define>
+	<define name="shot-result">
+		<element name="shot-result">
+			<a:documentation xml:lang="ko">샷 정보에서 공의 피격 타입</a:documentation>
+			<choice>
+				<value>Good</value>
+				<a:documentation xml:lang="ko">굿 ( 정확히 맞음 )</a:documentation>
+				<value>Valid</value>
+				<a:documentation xml:lang="ko">유효함 ( 경기를 진행하기 무리가 없음 )</a:documentation>
+				<value>Miss</value>
+				<a:documentation xml:lang="ko">미스샷 ( 잘못 맞음 )</a:documentation>
+			</choice>
+		</element>
+	</define>
+	<define name="flying">
+		<element name="flying">
+			<a:documentation xml:lang="ko">샷 정보에서 공의 이동 방향 타입</a:documentation>
+			<choice>
+				<value>Pull Hook</value>
+				<a:documentation xml:lang="ko">풀 훅</a:documentation>
+				<value>Pull</value>
+				<a:documentation xml:lang="ko">풀 ( 직선 왼쪽 방향 )</a:documentation>
+				<value>Hook</value>
+				<a:documentation xml:lang="ko">훅</a:documentation>
+				<value>Draw</value>
+				<a:documentation xml:lang="ko">드로우</a:documentation>
+				<value>Straight</value>
+				<a:documentation xml:lang="ko">스트레이트 ( 직선 가운데 방향 )</a:documentation>
+				<value>Fade</value>
+				<a:documentation xml:lang="ko">페이드</a:documentation>
+				<value>Slice</value>
+				<a:documentation xml:lang="ko">슬라이스</a:documentation>
+				<value>Push</value>
+				<a:documentation xml:lang="ko">푸쉬 ( 직선 오른쪽 방향 )</a:documentation>
+				<value>Push Slice</value>
+				<a:documentation xml:lang="ko">푸쉬 슬라이스</a:documentation>
+			</choice>
+		</element>
+	</define>
+	<define name="landing">
+		<element name="landing">
+			<a:documentation xml:lang="ko">샷 정보에서 공이 떨어진 위치.</a:documentation>
+			<ref name="ball-pos-type"/>
+		</element>
+	</define>
+	<define name="ball-pos-type">
+		<a:documentation xml:lang="ko">샷 정보에서 사용하는 공의 위치 타입</a:documentation>
+		<choice>
+			<value>Tee Box</value>
+			<a:documentation xml:lang="ko">티박스</a:documentation>
+			<value>Fairway</value>
+			<a:documentation xml:lang="ko">페어웨이</a:documentation>
+			<value>Rough</value>
+			<a:documentation xml:lang="ko">러프</a:documentation>
+			<value>Fairway Bunker</value>
+			<a:documentation xml:lang="ko">페어웨이 벙커</a:documentation>
+			<value>Greenside Bunker</value>
+			<a:documentation xml:lang="ko">그린사이드 벙커 ( 샌드세이브를 판별하기 위해 필요 )</a:documentation>
+			<value>Hazard</value>
+			<a:documentation xml:lang="ko">해저드</a:documentation>
+			<value>Water Hazard</value>
+			<a:documentation xml:lang="ko">워터 해저드</a:documentation>
+			<value>OB</value>
+			<a:documentation xml:lang="ko">오비</a:documentation>
+			<value>Lost Ball</value>
+			<a:documentation xml:lang="ko">로스트 볼 ( 공의 위치를 알 수 없음 )</a:documentation>
+			<value>Apron/Fringe</value>
+			<a:documentation xml:lang="ko">에이프런 또는 프린지 ( 그린의 가장자리 )</a:documentation>
+			<value>Green</value>
+			<a:documentation xml:lang="ko">그린</a:documentation>
+			<value>Hole</value>
+			<a:documentation xml:lang="ko">홀</a:documentation>
+			<value>Unplayable</value>
+			<a:documentation xml:lang="ko">플레이가 불가능한 위치</a:documentation>
+		</choice>
+	</define>
+	<define name="club-type-attr">
+		<attribute name="type">
+			<ref name="club-type"/>
+		</attribute>
+	</define>
+	<define name="club">
+		<element name="club">
+			<a:documentation xml:lang="ko">샷에서 사용한 클럽</a:documentation>
+			<ref name="club-type-attr"/>
+			<ref name="opt-club-headnum-attr"/>
+			<ref name="opt-club-loftangle-attr"/>
+			<ref name="opt-club-nickname-attr"/>
+			<ref name="opt-custom-properties"/>
+		</element>
+	</define>
+	<define name="opt-club-headnum-attr">
+		<optional>
+			<ref name="club-headnum-attr"/>
+		</optional>
+	</define>
+	<define name="opt-club-loftangle-attr">
+		<optional>
+			<ref name="club-loftangle-attr"/>
+		</optional>
+	</define>
+	<define name="opt-club-nickname-attr">
+		<optional>
+			<ref name="club-nickname-attr"/>
+		</optional>
+	</define>
+	<define name="club-headnum-attr">
+		<attribute name="headnum">
+			<data type="integer" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"/>
+		</attribute>
+	</define>
+	<define name="club-loftangle-attr">
+		<attribute name="loftangle">
+			<data type="integer" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"/>
+		</attribute>
+	</define>
+	<define name="club-nickname-attr">
+		<attribute name="nickname">
+			<text/>
+		</attribute>
+	</define>
+	<define name="opt-custom-properties">
+		<optional>
+			<ref name="custom-properties"/>
+		</optional>
+	</define>
+	<define name="custom-properties">
+		<element name="custom-properties">
+			<a:documentation xml:lang="ko">커스텀 속성 리스트. 일반화하기 힘든 상세 정보를 기록할 때 사용한다.</a:documentation>
+			<zeroOrMore>
+				<ref name="property"/>
+			</zeroOrMore>
+		</element>
+	</define>
+	<define name="property">
+		<element name="property">
+			<a:documentation xml:lang="ko">커스텀 속성</a:documentation>
+			<ref name="name-attr"/>
+			<ref name="opt-xml-lang-attr"/>
+			<text/>
+		</element>
+	</define>
+	<define name="opt-wood-type-attr">
+		<optional>
+			<ref name="wood-type-attr"/>
+		</optional>
+	</define>
+	<define name="wood-type-attr">
+		<attribute name="type">
+			<a:documentation xml:lang="ko">우드의 세부 타입</a:documentation>
+			<choice>
+				<value>2</value>
+				<a:documentation xml:lang="ko">2번 우드</a:documentation>
+				<value>3</value>
+				<a:documentation xml:lang="ko">3번 우드</a:documentation>
+				<value>4</value>
+				<a:documentation xml:lang="ko">4번 우드</a:documentation>
+				<value>5</value>
+				<a:documentation xml:lang="ko">5번 우드</a:documentation>
+				<value>7</value>
+				<a:documentation xml:lang="ko">7번 우드</a:documentation>
+				<value>9</value>
+				<a:documentation xml:lang="ko">9번 우드</a:documentation>
+				<value>11</value>
+				<a:documentation xml:lang="ko">11번 우드</a:documentation>
+			</choice>
+		</attribute>
+	</define>
+	<define name="opt-iron-type-attr">
+		<optional>
+			<ref name="iron-type-attr"/>
+		</optional>
+	</define>
+	<define name="iron-type-attr">
+		<attribute name="type">
+			<a:documentation xml:lang="ko">아이언 타입</a:documentation>
+			<choice>
+				<value>1</value>
+				<a:documentation xml:lang="ko">1번 아이언</a:documentation>
+				<value>2</value>
+				<a:documentation xml:lang="ko">2번 아이언</a:documentation>
+				<value>3</value>
+				<a:documentation xml:lang="ko">3번 아이언</a:documentation>
+				<value>4</value>
+				<a:documentation xml:lang="ko">4번 아이언</a:documentation>
+				<value>5</value>
+				<a:documentation xml:lang="ko">5번 아이언</a:documentation>
+				<value>6</value>
+				<a:documentation xml:lang="ko">6번 아이언</a:documentation>
+				<value>7</value>
+				<a:documentation xml:lang="ko">7번 아이언</a:documentation>
+				<value>8</value>
+				<a:documentation xml:lang="ko">8번 아이언</a:documentation>
+				<value>9</value>
+				<a:documentation xml:lang="ko">9번 아이언</a:documentation>
+			</choice>
+		</attribute>
+	</define>
+	<define name="opt-wedge-type-attr">
+		<optional>
+			<ref name="wedge-type-attr"/>
+		</optional>
+	</define>
+	<define name="wedge-type-attr">
+		<attribute name="type">
+			<a:documentation xml:lang="ko">웨지의 세부 타입</a:documentation>
+			<choice>
+				<value>Pitching</value>
+				<a:documentation xml:lang="ko">피칭 웨지</a:documentation>
+				<value>Sand</value>
+				<a:documentation xml:lang="ko">샌드 웨지</a:documentation>
+				<value>Lob</value>
+				<a:documentation xml:lang="ko">로브 웨지</a:documentation>
+			</choice>
+		</attribute>
+	</define>
+	<define name="language-code-TYPE">
+		<a:documentation xml:lang="ko">ISO 639-1에 의한 언어 코드 타입</a:documentation>
+		<choice>
+			<value>ab</value>
+			<a:documentation xml:lang="en">Abkhazian</a:documentation>
+			<value>aa</value>
+			<a:documentation xml:lang="en">Afar</a:documentation>
+			<value>af</value>
+			<a:documentation xml:lang="en">Afrikaans</a:documentation>
+			<value>sq</value>
+			<a:documentation xml:lang="en">Albanian</a:documentation>
+			<value>am</value>
+			<a:documentation xml:lang="en">Amharic</a:documentation>
+			<value>ar</value>
+			<a:documentation xml:lang="en">Arabic</a:documentation>
+			<value>hy</value>
+			<a:documentation xml:lang="en">Armenian</a:documentation>
+			<value>as</value>
+			<a:documentation xml:lang="en">Assamese</a:documentation>
+			<value>ay</value>
+			<a:documentation xml:lang="en">Aymara</a:documentation>
+			<value>az</value>
+			<a:documentation xml:lang="en">Azerbaijani</a:documentation>
+			<value>ba</value>
+			<a:documentation xml:lang="en">Bashkir</a:documentation>
+			<value>eu</value>
+			<a:documentation xml:lang="en">Basque</a:documentation>
+			<value>bn</value>
+			<a:documentation xml:lang="en">Bengali (Bangla)</a:documentation>
+			<value>dz</value>
+			<a:documentation xml:lang="en">Bhutani</a:documentation>
+			<value>bh</value>
+			<a:documentation xml:lang="en">Bihari</a:documentation>
+			<value>bi</value>
+			<a:documentation xml:lang="en">Bislama</a:documentation>
+			<value>br</value>
+			<a:documentation xml:lang="en">Breton</a:documentation>
+			<value>bg</value>
+			<a:documentation xml:lang="en">Bulgarian</a:documentation>
+			<value>my</value>
+			<a:documentation xml:lang="en">Burmese</a:documentation>
+			<value>be</value>
+			<a:documentation xml:lang="en">Byelorussian (Belarusian)</a:documentation>
+			<value>km</value>
+			<a:documentation xml:lang="en">Cambodian</a:documentation>
+			<value>ca</value>
+			<a:documentation xml:lang="en">Catalan</a:documentation>
+			<value>zh</value>
+			<a:documentation xml:lang="en">Chinese (Simplified)</a:documentation>
+			<value>zh</value>
+			<a:documentation xml:lang="en">Chinese (Traditional)</a:documentation>
+			<value>co</value>
+			<a:documentation xml:lang="en">Corsican</a:documentation>
+			<value>hr</value>
+			<a:documentation xml:lang="en">Croatian</a:documentation>
+			<value>cs</value>
+			<a:documentation xml:lang="en">Czech</a:documentation>
+			<value>da</value>
+			<a:documentation xml:lang="en">Danish</a:documentation>
+			<value>nl</value>
+			<a:documentation xml:lang="en">Dutch</a:documentation>
+			<value>en</value>
+			<a:documentation xml:lang="en">English</a:documentation>
+			<value>eo</value>
+			<a:documentation xml:lang="en">Esperanto</a:documentation>
+			<value>et</value>
+			<a:documentation xml:lang="en">Estonian</a:documentation>
+			<value>fo</value>
+			<a:documentation xml:lang="en">Faeroese</a:documentation>
+			<value>fa</value>
+			<a:documentation xml:lang="en">Farsi</a:documentation>
+			<value>fj</value>
+			<a:documentation xml:lang="en">Fiji</a:documentation>
+			<value>fi</value>
+			<a:documentation xml:lang="en">Finnish</a:documentation>
+			<value>fr</value>
+			<a:documentation xml:lang="en">French</a:documentation>
+			<value>fy</value>
+			<a:documentation xml:lang="en">Frisian</a:documentation>
+			<value>gl</value>
+			<a:documentation xml:lang="en">Galician</a:documentation>
+			<value>gd</value>
+			<a:documentation xml:lang="en">Gaelic (Scottish)</a:documentation>
+			<value>gv</value>
+			<a:documentation xml:lang="en">Gaelic (Manx)</a:documentation>
+			<value>ka</value>
+			<a:documentation xml:lang="en">Georgian</a:documentation>
+			<value>de</value>
+			<a:documentation xml:lang="en">German</a:documentation>
+			<value>el</value>
+			<a:documentation xml:lang="en">Greek</a:documentation>
+			<value>kl</value>
+			<a:documentation xml:lang="en">Greenlandic</a:documentation>
+			<value>gn</value>
+			<a:documentation xml:lang="en">Guarani</a:documentation>
+			<value>gu</value>
+			<a:documentation xml:lang="en">Gujarati</a:documentation>
+			<value>ha</value>
+			<a:documentation xml:lang="en">Hausa</a:documentation>
+			<value>he</value>
+			<a:documentation xml:lang="en">Hebrew</a:documentation>
+			<value>iw</value>
+			<a:documentation xml:lang="en">Hebrew</a:documentation>
+			<value>hi</value>
+			<a:documentation xml:lang="en">Hindi</a:documentation>
+			<value>hu</value>
+			<a:documentation xml:lang="en">Hungarian</a:documentation>
+			<value>is</value>
+			<a:documentation xml:lang="en">Icelandic</a:documentation>
+			<value>id</value>
+			<a:documentation xml:lang="en">Indonesian</a:documentation>
+			<value>in</value>
+			<a:documentation xml:lang="en">Indonesian</a:documentation>
+			<value>ia</value>
+			<a:documentation xml:lang="en">Interlingua</a:documentation>
+			<value>ie</value>
+			<a:documentation xml:lang="en">Interlingue</a:documentation>
+			<value>iu</value>
+			<a:documentation xml:lang="en">Inuktitut</a:documentation>
+			<value>ik</value>
+			<a:documentation xml:lang="en">Inupiak</a:documentation>
+			<value>ga</value>
+			<a:documentation xml:lang="en">Irish</a:documentation>
+			<value>it</value>
+			<a:documentation xml:lang="en">Italian</a:documentation>
+			<value>ja</value>
+			<a:documentation xml:lang="en">Japanese</a:documentation>
+			<value>jv</value>
+			<a:documentation xml:lang="en">Javanese</a:documentation>
+			<value>kn</value>
+			<a:documentation xml:lang="en">Kannada</a:documentation>
+			<value>ks</value>
+			<a:documentation xml:lang="en">Kashmiri</a:documentation>
+			<value>kk</value>
+			<a:documentation xml:lang="en">Kazakh</a:documentation>
+			<value>rw</value>
+			<a:documentation xml:lang="en">Kinyarwanda (Ruanda)</a:documentation>
+			<value>ky</value>
+			<a:documentation xml:lang="en">Kirghiz</a:documentation>
+			<value>rn</value>
+			<a:documentation xml:lang="en">Kirundi (Rundi)</a:documentation>
+			<value>ko</value>
+			<a:documentation xml:lang="en">Korean</a:documentation>
+			<value>ku</value>
+			<a:documentation xml:lang="en">Kurdish</a:documentation>
+			<value>lo</value>
+			<a:documentation xml:lang="en">Laothian</a:documentation>
+			<value>la</value>
+			<a:documentation xml:lang="en">Latin</a:documentation>
+			<value>lv</value>
+			<a:documentation xml:lang="en">Latvian (Lettish)</a:documentation>
+			<value>li</value>
+			<a:documentation xml:lang="en">Limburgish (Limburger)</a:documentation>
+			<value>ln</value>
+			<a:documentation xml:lang="en">Lingala</a:documentation>
+			<value>lt</value>
+			<a:documentation xml:lang="en">Lithuanian</a:documentation>
+			<value>mk</value>
+			<a:documentation xml:lang="en">Macedonian</a:documentation>
+			<value>mg</value>
+			<a:documentation xml:lang="en">Malagasy</a:documentation>
+			<value>ms</value>
+			<a:documentation xml:lang="en">Malay</a:documentation>
+			<value>ml</value>
+			<a:documentation xml:lang="en">Malayalam</a:documentation>
+			<value>mt</value>
+			<a:documentation xml:lang="en">Maltese</a:documentation>
+			<value>mi</value>
+			<a:documentation xml:lang="en">Maori</a:documentation>
+			<value>mr</value>
+			<a:documentation xml:lang="en">Marathi</a:documentation>
+			<value>mo</value>
+			<a:documentation xml:lang="en">Moldavian</a:documentation>
+			<value>mn</value>
+			<a:documentation xml:lang="en">Mongolian</a:documentation>
+			<value>na</value>
+			<a:documentation xml:lang="en">Nauru</a:documentation>
+			<value>ne</value>
+			<a:documentation xml:lang="en">Nepali</a:documentation>
+			<value>no</value>
+			<a:documentation xml:lang="en">Norwegian</a:documentation>
+			<value>oc</value>
+			<a:documentation xml:lang="en">Occitan</a:documentation>
+			<value>or</value>
+			<a:documentation xml:lang="en">Oriya</a:documentation>
+			<value>om</value>
+			<a:documentation xml:lang="en">Oromo (Afan, Galla)</a:documentation>
+			<value>ps</value>
+			<a:documentation xml:lang="en">Pashto (Pushto)</a:documentation>
+			<value>pl</value>
+			<a:documentation xml:lang="en">Polish</a:documentation>
+			<value>pt</value>
+			<a:documentation xml:lang="en">Portuguese</a:documentation>
+			<value>pa</value>
+			<a:documentation xml:lang="en">Punjabi</a:documentation>
+			<value>qu</value>
+			<a:documentation xml:lang="en">Quechua</a:documentation>
+			<value>rm</value>
+			<a:documentation xml:lang="en">Rhaeto-Romance</a:documentation>
+			<value>ro</value>
+			<a:documentation xml:lang="en">Romanian</a:documentation>
+			<value>ru</value>
+			<a:documentation xml:lang="en">Russian</a:documentation>
+			<value>sm</value>
+			<a:documentation xml:lang="en">Samoan</a:documentation>
+			<value>sg</value>
+			<a:documentation xml:lang="en">Sangro</a:documentation>
+			<value>sa</value>
+			<a:documentation xml:lang="en">Sanskrit</a:documentation>
+			<value>sr</value>
+			<a:documentation xml:lang="en">Serbian</a:documentation>
+			<value>sh</value>
+			<a:documentation xml:lang="en">Serbo-Croatian</a:documentation>
+			<value>st</value>
+			<a:documentation xml:lang="en">Sesotho</a:documentation>
+			<value>tn</value>
+			<a:documentation xml:lang="en">Setswana</a:documentation>
+			<value>sn</value>
+			<a:documentation xml:lang="en">Shona</a:documentation>
+			<value>sd</value>
+			<a:documentation xml:lang="en">Sindhi</a:documentation>
+			<value>si</value>
+			<a:documentation xml:lang="en">Sinhalese</a:documentation>
+			<value>ss</value>
+			<a:documentation xml:lang="en">Siswati</a:documentation>
+			<value>sk</value>
+			<a:documentation xml:lang="en">Slovak</a:documentation>
+			<value>sl</value>
+			<a:documentation xml:lang="en">Slovenian</a:documentation>
+			<value>so</value>
+			<a:documentation xml:lang="en">Somali</a:documentation>
+			<value>es</value>
+			<a:documentation xml:lang="en">Spanish</a:documentation>
+			<value>su</value>
+			<a:documentation xml:lang="en">Sundanese</a:documentation>
+			<value>sw</value>
+			<a:documentation xml:lang="en">Swahili (Kiswahili)</a:documentation>
+			<value>sv</value>
+			<a:documentation xml:lang="en">Swedish</a:documentation>
+			<value>tl</value>
+			<a:documentation xml:lang="en">Tagalog</a:documentation>
+			<value>tg</value>
+			<a:documentation xml:lang="en">Tajik</a:documentation>
+			<value>ta</value>
+			<a:documentation xml:lang="en">Tamil</a:documentation>
+			<value>tt</value>
+			<a:documentation xml:lang="en">Tatar</a:documentation>
+			<value>te</value>
+			<a:documentation xml:lang="en">Telugu</a:documentation>
+			<value>th</value>
+			<a:documentation xml:lang="en">Thai</a:documentation>
+			<value>bo</value>
+			<a:documentation xml:lang="en">Tibetan</a:documentation>
+			<value>ti</value>
+			<a:documentation xml:lang="en">Tigrinya</a:documentation>
+			<value>to</value>
+			<a:documentation xml:lang="en">Tonga</a:documentation>
+			<value>ts</value>
+			<a:documentation xml:lang="en">Tsonga</a:documentation>
+			<value>tr</value>
+			<a:documentation xml:lang="en">Turkish</a:documentation>
+			<value>tk</value>
+			<a:documentation xml:lang="en">Turkmen</a:documentation>
+			<value>tw</value>
+			<a:documentation xml:lang="en">Twi</a:documentation>
+			<value>ug</value>
+			<a:documentation xml:lang="en">Uighur</a:documentation>
+			<value>uk</value>
+			<a:documentation xml:lang="en">Ukrainian</a:documentation>
+			<value>ur</value>
+			<a:documentation xml:lang="en">Urdu</a:documentation>
+			<value>uz</value>
+			<a:documentation xml:lang="en">Uzbek</a:documentation>
+			<value>vi</value>
+			<a:documentation xml:lang="en">Vietnamese</a:documentation>
+			<value>vo</value>
+			<a:documentation xml:lang="en">Volapuk</a:documentation>
+			<value>cy</value>
+			<a:documentation xml:lang="en">Welsh</a:documentation>
+			<value>wo</value>
+			<a:documentation xml:lang="en">Wolof</a:documentation>
+			<value>xh</value>
+			<a:documentation xml:lang="en">Xhosa</a:documentation>
+			<value>yi</value>
+			<a:documentation xml:lang="en">Yiddish</a:documentation>
+			<value>ji</value>
+			<a:documentation xml:lang="en">Yiddish</a:documentation>
+			<value>yo</value>
+			<a:documentation xml:lang="en">Yoruba</a:documentation>
+			<value>zu</value>
+			<a:documentation xml:lang="en">Zulu</a:documentation>
+		</choice>
+	</define>
+	<define name="country-code-TYPE">
+		<a:documentation>ISO 3166-1:2006에 의한 국가코드 타입</a:documentation>
+		<choice>
+			<value>AD</value>
+			<a:documentation>ANDORRA</a:documentation>
+			<value>AE</value>
+			<a:documentation>UNITED ARAB EMIRATES</a:documentation>
+			<value>AF</value>
+			<a:documentation>AFGHANISTAN</a:documentation>
+			<value>AG</value>
+			<a:documentation>ANTIGUA AND BARBUDA</a:documentation>
+			<value>AI</value>
+			<a:documentation>ANGUILLA</a:documentation>
+			<value>AL</value>
+			<a:documentation>ALBANIA</a:documentation>
+			<value>AM</value>
+			<a:documentation>ARMENIA</a:documentation>
+			<value>AN</value>
+			<a:documentation>NETHERLANDS ANTILLES</a:documentation>
+			<value>AO</value>
+			<a:documentation>ANGOLA</a:documentation>
+			<value>AQ</value>
+			<a:documentation>ANTARCTICA</a:documentation>
+			<value>AR</value>
+			<a:documentation>ARGENTINA</a:documentation>
+			<value>AS</value>
+			<a:documentation>AMERICAN SAMOA</a:documentation>
+			<value>AT</value>
+			<a:documentation>AUSTRIA</a:documentation>
+			<value>AU</value>
+			<a:documentation>AUSTRALIA</a:documentation>
+			<value>AW</value>
+			<a:documentation>ARUBA</a:documentation>
+			<value>AX</value>
+			<a:documentation>ALAND ISLANDS</a:documentation>
+			<value>AZ</value>
+			<a:documentation>AZERBAIJAN</a:documentation>
+			<value>BA</value>
+			<a:documentation>BOSNIA AND HERZEGOVINA</a:documentation>
+			<value>BB</value>
+			<a:documentation>BARBADOS</a:documentation>
+			<value>BD</value>
+			<a:documentation>BANGLADESH</a:documentation>
+			<value>BE</value>
+			<a:documentation>BELGIUM</a:documentation>
+			<value>BF</value>
+			<a:documentation>BURKINA FASO</a:documentation>
+			<value>BG</value>
+			<a:documentation>BULGARIA</a:documentation>
+			<value>BH</value>
+			<a:documentation>BAHRAIN</a:documentation>
+			<value>BI</value>
+			<a:documentation>BURUNDI</a:documentation>
+			<value>BJ</value>
+			<a:documentation>BENIN</a:documentation>
+			<value>BL</value>
+			<a:documentation>SAINT BARTH?LEMY</a:documentation>
+			<value>BM</value>
+			<a:documentation>BERMUDA</a:documentation>
+			<value>BN</value>
+			<a:documentation>BRUNEI DARUSSALAM</a:documentation>
+			<value>BO</value>
+			<a:documentation>BOLIVIA</a:documentation>
+			<value>BR</value>
+			<a:documentation>BRAZIL</a:documentation>
+			<value>BS</value>
+			<a:documentation>BAHAMAS</a:documentation>
+			<value>BT</value>
+			<a:documentation>BHUTAN</a:documentation>
+			<value>BV</value>
+			<a:documentation>BOUVET ISLAND</a:documentation>
+			<value>BW</value>
+			<a:documentation>BOTSWANA</a:documentation>
+			<value>BY</value>
+			<a:documentation>BELARUS</a:documentation>
+			<value>BZ</value>
+			<a:documentation>BELIZE</a:documentation>
+			<value>CA</value>
+			<a:documentation>CANADA</a:documentation>
+			<value>CC</value>
+			<a:documentation>COCOS (KEELING) ISLANDS</a:documentation>
+			<value>CD</value>
+			<a:documentation>CONGO, THE DEMOCRATIC REPUBLIC OF THE</a:documentation>
+			<value>CF</value>
+			<a:documentation>CENTRAL AFRICAN REPUBLIC</a:documentation>
+			<value>CG</value>
+			<a:documentation>CONGO</a:documentation>
+			<value>CH</value>
+			<a:documentation>SWITZERLAND</a:documentation>
+			<value>CI</value>
+			<a:documentation>COTE D&apos;IVOIRE</a:documentation>
+			<value>CK</value>
+			<a:documentation>COOK ISLANDS</a:documentation>
+			<value>CL</value>
+			<a:documentation>CHILE</a:documentation>
+			<value>CM</value>
+			<a:documentation>CAMEROON</a:documentation>
+			<value>CN</value>
+			<a:documentation>CHINA</a:documentation>
+			<value>CO</value>
+			<a:documentation>COLOMBIA</a:documentation>
+			<value>CR</value>
+			<a:documentation>COSTA RICA</a:documentation>
+			<value>CU</value>
+			<a:documentation>CUBA</a:documentation>
+			<value>CV</value>
+			<a:documentation>CAPE VERDE</a:documentation>
+			<value>CX</value>
+			<a:documentation>CHRISTMAS ISLAND</a:documentation>
+			<value>CY</value>
+			<a:documentation>CYPRUS</a:documentation>
+			<value>CZ</value>
+			<a:documentation>CZECH REPUBLIC</a:documentation>
+			<value>DE</value>
+			<a:documentation>GERMANY</a:documentation>
+			<value>DJ</value>
+			<a:documentation>DJIBOUTI</a:documentation>
+			<value>DK</value>
+			<a:documentation>DENMARK</a:documentation>
+			<value>DM</value>
+			<a:documentation>DOMINICA</a:documentation>
+			<value>DO</value>
+			<a:documentation>DOMINICAN REPUBLIC</a:documentation>
+			<value>DZ</value>
+			<a:documentation>ALGERIA</a:documentation>
+			<value>EC</value>
+			<a:documentation>ECUADOR</a:documentation>
+			<value>EE</value>
+			<a:documentation>ESTONIA</a:documentation>
+			<value>EG</value>
+			<a:documentation>EGYPT</a:documentation>
+			<value>EH</value>
+			<a:documentation>WESTERN SAHARA</a:documentation>
+			<value>ER</value>
+			<a:documentation>ERITREA</a:documentation>
+			<value>ES</value>
+			<a:documentation>SPAIN</a:documentation>
+			<value>ET</value>
+			<a:documentation>ETHIOPIA</a:documentation>
+			<value>FI</value>
+			<a:documentation>FINLAND</a:documentation>
+			<value>FJ</value>
+			<a:documentation>FIJI</a:documentation>
+			<value>FK</value>
+			<a:documentation>FALKLAND ISLANDS (MALVINAS)</a:documentation>
+			<value>FM</value>
+			<a:documentation>MICRONESIA, FEDERATED STATES OF</a:documentation>
+			<value>FO</value>
+			<a:documentation>FAROE ISLANDS</a:documentation>
+			<value>FR</value>
+			<a:documentation>FRANCE</a:documentation>
+			<value>GA</value>
+			<a:documentation>GABON</a:documentation>
+			<value>GB</value>
+			<a:documentation>UNITED KINGDOM</a:documentation>
+			<value>GD</value>
+			<a:documentation>GRENADA</a:documentation>
+			<value>GE</value>
+			<a:documentation>GEORGIA</a:documentation>
+			<value>GF</value>
+			<a:documentation>FRENCH GUIANA</a:documentation>
+			<value>GG</value>
+			<a:documentation>GUERNSEY</a:documentation>
+			<value>GH</value>
+			<a:documentation>GHANA</a:documentation>
+			<value>GI</value>
+			<a:documentation>GIBRALTAR</a:documentation>
+			<value>GL</value>
+			<a:documentation>GREENLAND</a:documentation>
+			<value>GM</value>
+			<a:documentation>GAMBIA</a:documentation>
+			<value>GN</value>
+			<a:documentation>GUINEA</a:documentation>
+			<value>GP</value>
+			<a:documentation>GUADELOUPE</a:documentation>
+			<value>GQ</value>
+			<a:documentation>EQUATORIAL GUINEA</a:documentation>
+			<value>GR</value>
+			<a:documentation>GREECE</a:documentation>
+			<value>GS</value>
+			<a:documentation>SOUTH GEORGIA AND THE SOUTH SANDWICH ISLANDS</a:documentation>
+			<value>GT</value>
+			<a:documentation>GUATEMALA</a:documentation>
+			<value>GU</value>
+			<a:documentation>GUAM</a:documentation>
+			<value>GW</value>
+			<a:documentation>GUINEA-BISSAU</a:documentation>
+			<value>GY</value>
+			<a:documentation>GUYANA</a:documentation>
+			<value>HK</value>
+			<a:documentation>HONG KONG</a:documentation>
+			<value>HM</value>
+			<a:documentation>HEARD ISLAND AND MCDONALD ISLANDS</a:documentation>
+			<value>HN</value>
+			<a:documentation>HONDURAS</a:documentation>
+			<value>HR</value>
+			<a:documentation>CROATIA</a:documentation>
+			<value>HT</value>
+			<a:documentation>HAITI</a:documentation>
+			<value>HU</value>
+			<a:documentation>HUNGARY</a:documentation>
+			<value>ID</value>
+			<a:documentation>INDONESIA</a:documentation>
+			<value>IE</value>
+			<a:documentation>IRELAND</a:documentation>
+			<value>IL</value>
+			<a:documentation>ISRAEL</a:documentation>
+			<value>IM</value>
+			<a:documentation>ISLE OF MAN</a:documentation>
+			<value>IN</value>
+			<a:documentation>INDIA</a:documentation>
+			<value>IO</value>
+			<a:documentation>BRITISH INDIAN OCEAN TERRITORY</a:documentation>
+			<value>IQ</value>
+			<a:documentation>IRAQ</a:documentation>
+			<value>IR</value>
+			<a:documentation>IRAN, ISLAMIC REPUBLIC OF</a:documentation>
+			<value>IS</value>
+			<a:documentation>ICELAND</a:documentation>
+			<value>IT</value>
+			<a:documentation>ITALY</a:documentation>
+			<value>JE</value>
+			<a:documentation>JERSEY</a:documentation>
+			<value>JM</value>
+			<a:documentation>JAMAICA</a:documentation>
+			<value>JO</value>
+			<a:documentation>JORDAN</a:documentation>
+			<value>JP</value>
+			<a:documentation>JAPAN</a:documentation>
+			<value>KE</value>
+			<a:documentation>KENYA</a:documentation>
+			<value>KG</value>
+			<a:documentation>KYRGYZSTAN</a:documentation>
+			<value>KH</value>
+			<a:documentation>CAMBODIA</a:documentation>
+			<value>KI</value>
+			<a:documentation>KIRIBATI</a:documentation>
+			<value>KM</value>
+			<a:documentation>COMOROS</a:documentation>
+			<value>KN</value>
+			<a:documentation>SAINT KITTS AND NEVIS</a:documentation>
+			<value>KP</value>
+			<a:documentation>KOREA, DEMOCRATIC PEOPLE&apos;S REPUBLIC OF</a:documentation>
+			<value>KR</value>
+			<a:documentation>KOREA, REPUBLIC OF</a:documentation>
+			<value>KW</value>
+			<a:documentation>KUWAIT</a:documentation>
+			<value>KY</value>
+			<a:documentation>CAYMAN ISLANDS</a:documentation>
+			<value>KZ</value>
+			<a:documentation>KAZAKHSTAN</a:documentation>
+			<value>LA</value>
+			<a:documentation>LAO PEOPLE&apos;S DEMOCRATIC REPUBLIC</a:documentation>
+			<value>LB</value>
+			<a:documentation>LEBANON</a:documentation>
+			<value>LC</value>
+			<a:documentation>SAINT LUCIA</a:documentation>
+			<value>LI</value>
+			<a:documentation>LIECHTENSTEIN</a:documentation>
+			<value>LK</value>
+			<a:documentation>SRI LANKA</a:documentation>
+			<value>LR</value>
+			<a:documentation>LIBERIA</a:documentation>
+			<value>LS</value>
+			<a:documentation>LESOTHO</a:documentation>
+			<value>LT</value>
+			<a:documentation>LITHUANIA</a:documentation>
+			<value>LU</value>
+			<a:documentation>LUXEMBOURG</a:documentation>
+			<value>LV</value>
+			<a:documentation>LATVIA</a:documentation>
+			<value>LY</value>
+			<a:documentation>LIBYAN ARAB JAMAHIRIYA</a:documentation>
+			<value>MA</value>
+			<a:documentation>MOROCCO</a:documentation>
+			<value>MC</value>
+			<a:documentation>MONACO</a:documentation>
+			<value>MD</value>
+			<a:documentation>MOLDOVA, REPUBLIC OF</a:documentation>
+			<value>ME</value>
+			<a:documentation>MONTENEGRO</a:documentation>
+			<value>MF</value>
+			<a:documentation>SAINT MARTIN (FRENCH PART)</a:documentation>
+			<value>MG</value>
+			<a:documentation>MADAGASCAR</a:documentation>
+			<value>MH</value>
+			<a:documentation>MARSHALL ISLANDS</a:documentation>
+			<value>MK</value>
+			<a:documentation>MACEDONIA, THE FORMER YUGOSLAV REPUBLIC OF</a:documentation>
+			<value>ML</value>
+			<a:documentation>MALI</a:documentation>
+			<value>MM</value>
+			<a:documentation>MYANMAR</a:documentation>
+			<value>MN</value>
+			<a:documentation>MONGOLIA</a:documentation>
+			<value>MO</value>
+			<a:documentation>MACAO</a:documentation>
+			<value>MP</value>
+			<a:documentation>NORTHERN MARIANA ISLANDS</a:documentation>
+			<value>MQ</value>
+			<a:documentation>MARTINIQUE</a:documentation>
+			<value>MR</value>
+			<a:documentation>MAURITANIA</a:documentation>
+			<value>MS</value>
+			<a:documentation>MONTSERRAT</a:documentation>
+			<value>MT</value>
+			<a:documentation>MALTA</a:documentation>
+			<value>MU</value>
+			<a:documentation>MAURITIUS</a:documentation>
+			<value>MV</value>
+			<a:documentation>MALDIVES</a:documentation>
+			<value>MW</value>
+			<a:documentation>MALAWI</a:documentation>
+			<value>MX</value>
+			<a:documentation>MEXICO</a:documentation>
+			<value>MY</value>
+			<a:documentation>MALAYSIA</a:documentation>
+			<value>MZ</value>
+			<a:documentation>MOZAMBIQUE</a:documentation>
+			<value>NA</value>
+			<a:documentation>NAMIBIA</a:documentation>
+			<value>NC</value>
+			<a:documentation>NEW CALEDONIA</a:documentation>
+			<value>NE</value>
+			<a:documentation>NIGER</a:documentation>
+			<value>NF</value>
+			<a:documentation>NORFOLK ISLAND</a:documentation>
+			<value>NG</value>
+			<a:documentation>NIGERIA</a:documentation>
+			<value>NI</value>
+			<a:documentation>NICARAGUA</a:documentation>
+			<value>NL</value>
+			<a:documentation>NETHERLANDS</a:documentation>
+			<value>NO</value>
+			<a:documentation>NORWAY</a:documentation>
+			<value>NP</value>
+			<a:documentation>NEPAL</a:documentation>
+			<value>NR</value>
+			<a:documentation>NAURU</a:documentation>
+			<value>NU</value>
+			<a:documentation>NIUE</a:documentation>
+			<value>NZ</value>
+			<a:documentation>NEW ZEALAND</a:documentation>
+			<value>OM</value>
+			<a:documentation>OMAN</a:documentation>
+			<value>PA</value>
+			<a:documentation>PANAMA</a:documentation>
+			<value>PE</value>
+			<a:documentation>PERU</a:documentation>
+			<value>PF</value>
+			<a:documentation>FRENCH POLYNESIA</a:documentation>
+			<value>PG</value>
+			<a:documentation>PAPUA NEW GUINEA</a:documentation>
+			<value>PH</value>
+			<a:documentation>PHILIPPINES</a:documentation>
+			<value>PK</value>
+			<a:documentation>PAKISTAN</a:documentation>
+			<value>PL</value>
+			<a:documentation>POLAND</a:documentation>
+			<value>PM</value>
+			<a:documentation>SAINT PIERRE AND MIQUELON</a:documentation>
+			<value>PN</value>
+			<a:documentation>PITCAIRN</a:documentation>
+			<value>PR</value>
+			<a:documentation>PUERTO RICO</a:documentation>
+			<value>PS</value>
+			<a:documentation>PALESTINIAN TERRITORY, OCCUPIED</a:documentation>
+			<value>PT</value>
+			<a:documentation>PORTUGAL</a:documentation>
+			<value>PW</value>
+			<a:documentation>PALAU</a:documentation>
+			<value>PY</value>
+			<a:documentation>PARAGUAY</a:documentation>
+			<value>QA</value>
+			<a:documentation>QATAR</a:documentation>
+			<value>RE</value>
+			<a:documentation>REUNION</a:documentation>
+			<value>RO</value>
+			<a:documentation>ROMANIA</a:documentation>
+			<value>RS</value>
+			<a:documentation>SERBIA</a:documentation>
+			<value>RU</value>
+			<a:documentation>RUSSIAN FEDERATION</a:documentation>
+			<value>RW</value>
+			<a:documentation>RWANDA</a:documentation>
+			<value>SA</value>
+			<a:documentation>SAUDI ARABIA</a:documentation>
+			<value>SB</value>
+			<a:documentation>SOLOMON ISLANDS</a:documentation>
+			<value>SC</value>
+			<a:documentation>SEYCHELLES</a:documentation>
+			<value>SD</value>
+			<a:documentation>SUDAN</a:documentation>
+			<value>SE</value>
+			<a:documentation>SWEDEN</a:documentation>
+			<value>SG</value>
+			<a:documentation>SINGAPORE</a:documentation>
+			<value>SH</value>
+			<a:documentation>SAINT HELENA</a:documentation>
+			<value>SI</value>
+			<a:documentation>SLOVENIA</a:documentation>
+			<value>SJ</value>
+			<a:documentation>SVALBARD AND JAN MAYEN</a:documentation>
+			<value>SK</value>
+			<a:documentation>SLOVAKIA</a:documentation>
+			<value>SL</value>
+			<a:documentation>SIERRA LEONE</a:documentation>
+			<value>SM</value>
+			<a:documentation>SAN MARINO</a:documentation>
+			<value>SN</value>
+			<a:documentation>SENEGAL</a:documentation>
+			<value>SO</value>
+			<a:documentation>SOMALIA</a:documentation>
+			<value>SR</value>
+			<a:documentation>SURINAME</a:documentation>
+			<value>ST</value>
+			<a:documentation>SAO TOME AND PRINCIPE</a:documentation>
+			<value>SV</value>
+			<a:documentation>EL SALVADOR</a:documentation>
+			<value>SY</value>
+			<a:documentation>SYRIAN ARAB REPUBLIC</a:documentation>
+			<value>SZ</value>
+			<a:documentation>SWAZILAND</a:documentation>
+			<value>TC</value>
+			<a:documentation>TURKS AND CAICOS ISLANDS</a:documentation>
+			<value>TD</value>
+			<a:documentation>CHAD</a:documentation>
+			<value>TF</value>
+			<a:documentation>FRENCH SOUTHERN TERRITORIES</a:documentation>
+			<value>TG</value>
+			<a:documentation>TOGO</a:documentation>
+			<value>TH</value>
+			<a:documentation>THAILAND</a:documentation>
+			<value>TJ</value>
+			<a:documentation>TAJIKISTAN</a:documentation>
+			<value>TK</value>
+			<a:documentation>TOKELAU</a:documentation>
+			<value>TL</value>
+			<a:documentation>TIMOR-LESTE</a:documentation>
+			<value>TM</value>
+			<a:documentation>TURKMENISTAN</a:documentation>
+			<value>TN</value>
+			<a:documentation>TUNISIA</a:documentation>
+			<value>TO</value>
+			<a:documentation>TONGA</a:documentation>
+			<value>TR</value>
+			<a:documentation>TURKEY</a:documentation>
+			<value>TT</value>
+			<a:documentation>TRINIDAD AND TOBAGO</a:documentation>
+			<value>TV</value>
+			<a:documentation>TUVALU</a:documentation>
+			<value>TW</value>
+			<a:documentation>TAIWAN, PROVINCE OF CHINA</a:documentation>
+			<value>TZ</value>
+			<a:documentation>TANZANIA, UNITED REPUBLIC OF</a:documentation>
+			<value>UA</value>
+			<a:documentation>UKRAINE</a:documentation>
+			<value>UG</value>
+			<a:documentation>UGANDA</a:documentation>
+			<value>UM</value>
+			<a:documentation>UNITED STATES MINOR OUTLYING ISLANDS</a:documentation>
+			<value>US</value>
+			<a:documentation>UNITED STATES</a:documentation>
+			<value>UY</value>
+			<a:documentation>URUGUAY</a:documentation>
+			<value>UZ</value>
+			<a:documentation>UZBEKISTAN</a:documentation>
+			<value>VA</value>
+			<a:documentation>HOLY SEE (VATICAN CITY STATE)</a:documentation>
+			<value>VC</value>
+			<a:documentation>SAINT VINCENT AND THE GRENADINES</a:documentation>
+			<value>VE</value>
+			<a:documentation>VENEZUELA, PLURINATIONAL STATE OF</a:documentation>
+			<value>VG</value>
+			<a:documentation>VIRGIN ISLANDS, BRITISH</a:documentation>
+			<value>VI</value>
+			<a:documentation>VIRGIN ISLANDS, U.S. </a:documentation>
+			<value>VN</value>
+			<a:documentation>VIET NAM</a:documentation>
+			<value>VU</value>
+			<a:documentation>VANUATU</a:documentation>
+			<value>WF</value>
+			<a:documentation>WALLIS AND FUTUNA</a:documentation>
+			<value>WS</value>
+			<a:documentation>SAMOA</a:documentation>
+			<value>YE</value>
+			<a:documentation>YEMEN</a:documentation>
+			<value>YT</value>
+			<a:documentation>MAYOTTE</a:documentation>
+			<value>ZA</value>
+			<a:documentation>SOUTH AFRICA</a:documentation>
+			<value>ZM</value>
+			<a:documentation>ZAMBIA</a:documentation>
+			<value>ZW</value>
+			<a:documentation>ZIMBABWE</a:documentation>
+		</choice>
+	</define>
+</grammar>

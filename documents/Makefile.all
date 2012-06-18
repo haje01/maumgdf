@@ -1,0 +1,6 @@
+all: $(LANGS)
+
+$(LANGS):
+	@cd $@ && $(MAKE) all LANG=$@
+
+.PHONY: all $(LANGS)

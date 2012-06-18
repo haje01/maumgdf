@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://www.w3.org/XML/1998/namespace">
+  <xs:import schemaLocation="gdf.xsd"/>
+  <xs:attribute name="lang" type="language-code-TYPE">
+    <xs:annotation>
+      <xs:documentation>다중언어 요소를 위한 ISO 639-1 언어코드 속성</xs:documentation>
+    </xs:annotation>
+  </xs:attribute>
+</xs:schema>

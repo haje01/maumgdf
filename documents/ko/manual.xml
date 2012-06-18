@@ -1,0 +1,1485 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?oxygen RNGSchema="file:../../../bookml/schema/bookml.rng" type="xml"?>
+<book xmlns="http://bookml.googlecode.com" bookml-version="0.1"
+	xmlns:xi="http://www.w3.org/2001/XInclude" draft="false" toclevel="3">
+	<info>
+		<title>MaumGDF 설명서</title>
+		<subtitle>골프 데이터 공유를 위한 XML 포맷</subtitle>
+		<author id="haje01">
+			<firstname>정주</firstname>
+			<surname>김</surname>
+			<orgname>엔플루토 주식회사</orgname>
+			<email>haje01@gmail.com</email>
+		</author>
+		<revhistory>
+			<revision date="2012-06-18">
+				<revauthor id="haje01"/>
+				<revdesc>
+					<para>OpenGDF를 fork하여 새로운 MaumGDF 시작</para>
+				</revdesc>
+			</revision>
+		</revhistory>
+		<pubdate>2012-06-18</pubdate>
+	</info>
+	<ednotice>
+		<para> MaumGDF 설명서. 김정주 저 </para>
+		<para> 저작권 2012년 마음골프 주식회사 </para>
+		<para> 이 문서는 임의로 변경되지 않은 상태로 누구나 자유롭게 읽거나 배포할 수 있다. </para>
+	</ednotice>
+	<dedication>
+		<para>골프 데이터의 공유를 원하는 모든 이에게</para>
+	</dedication>
+	<preface>
+		<para>MaumGDF( '마음 지디에프'로 읽는다 )는 <emphasis>Maum Golf Data Format</emphasis>의 약자로 골프에 관련한 데이터를 다양한 서비스 및 애플리케이션에서 상호 공유하는 것을 목표로 하는 공개 포맷이다.</para>
+		<sect1>
+			<title>비전</title>
+			<para>골프가 대중적인 스포츠로 많은 인기를 얻어감에 따라 인터넷과 정보통신 단말기를 이용한 다양한 골프 서비스와 애플리케이션이 등장하고 있지만 상호 연동에는 관심이 부족했던 것이 사실이다. PC 상의 골프 관련 인터넷 서비스에서 입력한 정보를 모바일 디바이스에서 사용하려면 같은 내용을 반복해서 입력해야 하는 것 같은 일들이 발생하고 있다.</para>
+			<para>만약 골프에 관한 범용 데이터 포맷이 있고, 많은 서비스 및 애플리케이션에서 그 포맷을 이용해서 정보를 내보내거나 가져오는 기능을 지원한다면, 사용자들은 더욱 편리하게 다양한 서비스를 이용할 수 있을 것이다. 이것은 나아가 골프 관련 정보를 다루는 업계 전반에도 긍정적인 역할을 할 것이다.</para>
+			<para>MaumGDF는 골프에 관한 데이터를 기술할 수 있는 포맷을 공개적으로 개발, 공유함으로써 사용자와 업계 모두에 도움을 주고자 한다.</para>
+		</sect1>
+		<sect1>
+			<title>대상 독자</title>
+			<para>이 글을 읽기 위해서는 최소한 다음과 같은 분야에 대한 지식을 필요로 한다.</para>
+			<ulist>
+				<li>
+					<para>기본적인 골프용어 및 룰에 대한 이해</para>
+					<para>아무래도 골프에 대한 포맷이기 때문에, 실재 골프에 대한 플레이 경험은 없더라도, 최소한의 골프 용어 및 게임규칙에 대한 이해가 있으면 포맷의 이해에도 큰 도움이 된다.</para>
+				</li>
+				<li>
+					<para>XML표준에 대한 기본적인 지식과 개발경험</para>
+					<para>MaumGDF에 맞게 데이터를 작성하거나 읽어오기 위해서는 기본적으로 XML표준에 대한 이해를 필요로 하며, 자신이 주로 사용하는 프로그래밍 언어에서 제공하는 XML관련 API의 사용법도 숙지해 둘 필요가 있다.</para>
+				</li>
+			</ulist>
+		</sect1>
+		<sect1>
+			<title>표기 형식</title>
+			<para>이 글에서는 일반 텍스트와 구분하기 위해서 다양한 서체를 사용하고 있다. 일부 중요한 내용을 강조하기 위해서 아이콘으로 꾸며진 상자를 사용하기도
+				한다.</para>
+			<sect2>
+				<title>볼드( Bold ) 체</title>
+				<para>강조 또는 본문의 특정위치로 링크가 걸려있는 경우에 사용한다.</para>
+			</sect2>
+			<sect2>
+				<title>쿠리어( Courier ) 체</title>
+				<para>XML 데이터를 나타내는 데 사용한다.</para>
+			</sect2>
+			<sect2>
+				<title>참고 상자</title>
+				<para>다음의 아이콘은 참고할 내용을 나타낸다.</para>
+				<note/>
+			</sect2>
+			<sect2>
+				<title>중요 상자</title>
+				<para>다음의 아이콘은 중요한 내용을 나타낸다.</para>
+				<important/>
+			</sect2>
+			<sect2>
+				<title>경고 상자</title>
+				<para>다음의 아이콘은 경고하는 내용을 나타낸다.</para>
+				<warning/>
+			</sect2>
+			<sect2>
+				<title>부분적인 XML 예</title>
+				<para>이 글에서는 XML 요소를 설명하는 데 있어, 대상이 되는 요소의 자식요소를 다음처럼 간략하게 표기하곤 한다. </para>
+				<program><![CDATA[
+	<country-club sid="npl-country-club">
+		<golf-course/>
+		<golf-course/>
+		<!-- ... -->
+	</country-club>]]></program>
+				<para>간략하게 표기된 자식 요소들이 실제로 그 형식대로 사용될 수 있다는 것은 아니기에 주의해야 한다. ( 자세한 것은 해당 요소의 설명을 찾아보자. ) 위의 경우 실제로 <code>golf-course</code>는 내용을 가질 수 있다. <code>&lt;!-- ... --&gt;</code>표시는 그 아래에 내용이 생략되었다는 의미로 쓰였다.</para>
+			</sect2>
+		</sect1>
+		<sect1>
+			<title>구현 내용</title>
+			<para>MaumGDF은 마음골프에서 사용하는 방식으로 골프경기의 결과를 기록하고 분석하는데 적합한 데이터 구조를 가지는 것을
+				목표로 하고 있다. 포맷의 표현은 XML 방식을 사용한다. 데이터의 큰 분류는 다음과 같다.</para>
+			<para>
+				<ulist>
+					<li>
+						<para>골프장 관련 정보</para>
+					</li>
+					<li>
+						<para>플레이어에 관한 정보</para>
+					</li>
+					<li>
+						<para>라운딩에 관한 정보</para>
+					</li>
+				</ulist>
+			</para>
+			<para>골프장 정보는 골프장의 코스와 홀의 속성에 관한 정보가 중심이다. 플레이어에 관한 정보는 플레이어의 신상 정보 및 현재 핸디캡에 관한 정보가 있다.
+				라운딩 정보는 어떤 플레이어가 어떤 골프 코스 홀에서 어떻게 플레이 하였는지에 대한 결과를 기록한 정보가 들어간다.</para>
+			<para>MaumGDF는 하나의 XML파일 안에 복수의 골프장, 플레이어, 라운딩 정보를 기술할 수 있게 되어 있다. 다음 장에서 MaumGDF의 구체적인
+				구조에 관해 살펴보겠다.</para>
+		</sect1>
+	</preface>
+	<chapter>
+		<title>기본 정보</title>
+		<para>지금부터 가장 일반적인 형태의 MaumGDF 구조를 예를 들어 설명하도록 하겠다. </para>
+		<important>
+			<para>XML은 그 특성상 스키마에 적합하기만 하면 다양한 형태의 문서가 나올 수 있다. 가능한 모든 조합을 여기에서 다 설명할 수는 없기에, 우선
+				일반적인 형태를 가정하고 설명하는 것이다. MaumGDF의 구조에 대한 완전한 이해를 위해서는 부록의 스키마 레퍼런스를 꼭 참고하도록
+			하자.</para>
+		</important>
+		<sect1>
+			<title>최상위 구조</title>
+			<para>MaumGDF포맷은 <code>gdf</code> 요소로 시작한다. 그 아래에는 프로파일, 골프장, 플레이어, 라운드 결과를 위한 요소들이 순서대로
+				나온다.</para>
+			<programco>
+				<program><![CDATA[
+<gdf version="0.2">
+	<profile/>
+	<country-club/>
+	<player/>
+	<round/>
+</gdf>]]></program>
+				<areaspec>
+					<area name="gdf" coord="1"/>
+					<area name="pf" coord="2"/>
+					<area name="gc" coord="3"/>
+					<area name="player" coord="4"/>
+					<area name="round" coord="5"/>
+				</areaspec>
+				<callouts>
+					<callout area="gdf">
+						<para>gdf포맷의 최상위 요소이다. 버전 정보 속성이 있다.</para>
+					</callout>
+					<callout area="pf">
+						<para>프로파일 요소. 이 XML 문서에 대한 특성 정보를 나타낸다.</para>
+					</callout>
+					<callout area="gc">
+						<para>골프장에 관한 요소이다. 생략 가능하고 여러번 나올 수도 있다.</para>
+					</callout>
+					<callout area="player">
+						<para>플레이어에 관한 요소이다. 생략 가능하고 여러번 나올 수도 있다.</para>
+					</callout>
+					<callout area="round">
+						<para>라운드결과에 관한 요소이다. 생략 가능하고 여러번 나올 수도 있다.</para>
+					</callout>
+				</callouts>
+			</programco>
+			<para>이렇게 상위 요소를 나누어 놓은 것은 각 요소별로 독립성을 보장하고 다수의 요소를 담을 수 있도록 하기 위해서 이다. 예를 들어 골프장 정보만을
+				여러개 전송하거나, 다수의 라운드 결과만 받을 수도 있다.</para>
+		</sect1>
+		<sect1>
+			<title>프로파일 정보</title>
+			<para>프로파일 정보는 이 문서를 생성한 서비스나 애플리케이션의 종류를 알리고, 사용하고 있는 좌표계 등 데이터의 소스에 따라 의미적인 차이가 발생할 수 있는 부분에 대한 추가 정보를 표시한다.</para>
+			<programco>
+				<program><![CDATA[
+	<profile name="GDS">
+		<created>2010-08-11T10:50:13</created>	
+		<coordinate-system/>
+	</profile>]]></program>
+				<areaspec>
+					<area name="pf" coord="1"/>
+					<area name="ct" coord="2"/>
+					<area name="cs" coord="3"/>
+				</areaspec>
+				<callouts>
+					<callout area="pf">
+						<para>프로파일 요소. 이름 속성에 데이터를 생성한 서비스나 애플리케이션의 이름을 기입한다.</para>
+					</callout>
+					<callout area="ct">
+						<para>일시 정보. 이 데이터를 생성한 일시</para>
+					</callout>
+					<callout area="cs">
+						<para>좌표계 정보. 이 데이터에서 사용한 좌표계 정보. 생략 가능하다.</para>
+					</callout>
+				</callouts>
+			</programco>
+			<sect2>
+				<title>좌표계 정보</title>
+				<para>골프 관련 데이터를 다루다 보면 서비스별로 다양한 방식의 좌표 데이터가 사용된다. 이를 위해 MaumGDF에서는 프로파일 요소안에 문서에서 사용할 좌표계 정보를 지정하게 하였다.</para>
+				<para>MaumGDF에서 사용하는 좌표계는 크게 직교좌표계( Cartesian Coordiate )와 지리좌표계( Geographic Coordinate )로 나누어 진다. 직교좌표계는 실제 지형에서 뽑은 좌표가 아닌, 시뮬레이터나 게임 등에서 사용이 용이하도록 3D 형태로 가공된 좌표이고, 지리 좌표계는 GPS 등을 통해 실재 지형에서 얻어진 좌표에 사용된다.</para>
+				<programco>
+					<program><![CDATA[
+		<coordinate-system distance-units="meters">
+			<cartesian orientation="Left Handed" up-axis="Y"/>
+		</coordinate-system>
+		]]></program>
+					<areaspec>
+						<area name="coord" coord="1"/>
+						<area name="carte" coord="2"/>
+					</areaspec>
+					<callouts>
+						<callout area="coord">
+							<para>좌표계 요소. 길이의 단위 속성을 가진다.</para>
+						</callout>
+						<callout area="carte">
+							<para><code>cartesian</code> 요소를 통해 X, Y, Z 값을 가지는 직교 좌표계( Cartesian
+								Coordinate )를 사용할 것을 선언한다. 좌표계 방향과 위쪽을 가르키는 축을 속성으로 가진다. 이 외에
+									<code>geographic</code> 요소를 통해 위도, 경도, 고도 값을 가지는 지리 좌표계( Geographic Coordinate )를 선택할 수 있다.</para>
+						</callout>
+					</callouts>
+				</programco>
+				<note>
+					<title>좌표계 정보의 사용</title>
+					<para>좌표계 정보는 생략 가능한 요소이나, 문서 안에 좌표 정보를 담고 있는 요소가 하나라도 있다면, 반드시 좌표계 정보를 명기해 주는 것이 좋다.</para>
+				</note>
+			</sect2>
+		</sect1>
+	</chapter>
+	<chapter>
+		<title>골프장 정보</title>
+		<para>이 장에서는 골프장 정보에 대해 알아보겠다. 골프장 정보에는 골프장의 주소와 연락처 그리고 골프장 안에 있는 골프코스에 대한 정보 등이 있다. 골프장 요소는 SID 속성을 선언해 나중에 참조할 수 있도록 한다.</para>
+		<note>
+			<title>SID 란?</title>
+			<para>SID는 영문자와 숫자, 그리고 - . _ 문자 만으로 구성된 간략한( Simple ) ID형식으로, 다른 XML요소를 참조하기 위해 사용한다.
+				이는 XML표준에는 없는 것으로, MaumGDF 내부적으로 정의해서 사용하는 타입이다. 문서 내부에서 선언한 SID에 대한 참조를 할 때는 '#' + SID 형식으로 사용하고, 문서 외부에서 선언한 SID는 URI + '#' + SID 형식으로 사용하는 것이 바람직하다.</para>
+			<program><![CDATA[
+	<country-club sid="npl-country-club">
+	<!-- ... -->
+	<round sid="round-001" country-club="#npl-country-club"/>
+	]]></program>
+			<para>SID를 통해 영속적으로 해당 정보를 참조 가능하도록 보장할 필요는 없다. 그러나 최소한 <emphasis>하나의 XML파일 안, 또는 메세지를 주고
+					받는 동안은 유니크한 참조가 보장</emphasis>되어야 한다.</para>
+		</note>
+		<para>골프장( Country Club ) 정보는 다음과 같이 구성된다.</para>
+		<programco>
+			<program><![CDATA[
+	<country-club sid="npl-country-club" updated="20110401">
+		<name xml:lang="ko">NPL 골프 클럽</name>
+		<short-name xml:lang="ko">NPL CC</short-name>
+		<address/>
+		<contact/>
+		<tee-markers/>
+		<golf-course/>
+		<golf-course/>
+		<!-- ... -->
+	</country-club>]]></program>
+			<areaspec>
+				<area name="cc" coord="1"/>
+				<area name="name" coord="2"/>
+				<area name="sname" coord="3"/>
+				<area name="addr" coord="4"/>
+				<area name="con" coord="5"/>
+				<area name="mar" coord="6"/>
+				<area name="gc" coord="7"/>
+			</areaspec>
+			<callouts>
+				<callout area="cc">
+					<para>골프장 요소. 골프장의 SID 속성을 가진다. 버전 관리를 위해 갱신된 날짜를 가질 수 있다.</para>
+				</callout>
+				<callout area="name">
+					<para>골프장의 정식 이름 요소. 이름을 완전하게 기술한다. 다중언어를 지원한다.</para>
+				</callout>
+				<callout area="sname">
+					<para>골프장의 간략 이름 요소. 이름이 너무 긴 경우 줄여서 부르기 위한 이름으로 생략 가능하다.</para>
+				</callout>
+				<callout area="addr">
+					<para>골프장의 주소</para>
+				</callout>
+				<callout area="con">
+					<para>골프장의 연락처</para>
+				</callout>
+				<callout area="mar">
+					<para>골프장에서 사용하는 티 분류용 마커들</para>
+				</callout>
+				<callout area="gc">
+					<para>골프 코스 정보. 하나 이상 나올 수 있다.</para>
+				</callout>
+			</callouts>
+		</programco>
+		<note>
+			<title>골프장 정보의 버전 관리</title>
+			<para>골프장의 정보는 관리 회사의 변경이나 정비 등의 이유로 잦은 변화를 겪는다. 이에 MaumGDF에서는 골프장 정보가 변경된 시점을 <code>updated</code>속성에 기술하여 데이터의 버전 관리에 참고할 수 있게 하였다.</para>
+			<para><code>updated</code>속성은 생략 가능하며 형식은 년, 월, 일을 이어서 기술한다. 자세한 것은 <link refid="scrf-type-date-type">스키마 레퍼런스</link>를 참조한다.</para>
+		</note>
+		<note>
+			<title>다중 언어를 지원하는 요소</title>
+			<para>MaumGDF에서는 어떤 요소의 내용이 다양한 언어로 표현될 수 있는 경우 <code>xml:lang</code> 속성에 언어 코드( ISO
+				639-1 )를 명기하여 중복 정의 할 수 있도록 하고 있다. 앞으로 이를 <emphasis>다중 언어 요소</emphasis>라고 부르겠다.</para>
+			<para>예를 들어 앞에서 나온 <code>name</code>이 대표적인 다중 언어 요소인데, 다음처럼 다양한 언어로 정의하여 사용할 수 있다.</para>
+			<program><![CDATA[
+	<country-club sid="npl-country-club">
+		<name xml:lang="ko">NPL 컨트리 클럽</name>					
+		<name xml:lang="en">NPL Country Club</name>
+		<name xml:lang="ja">NPL カントリークラブ</name>
+	</country-club>]]></program>
+			<para>만약 다중 언어 요소가 나올 곳에 <code>xml:lang</code>속성이 없고 하나의 요소만 있으면, 정보가 만들어진 측의 네이티브 언어로 가정한다.</para>
+		</note>
+		<sect1>
+			<title>주소</title>
+			<para>주소 요소는 ISO 3166-1d에 따르는 국가 코드를 속성으로 가지고, 그 내용은 고정되거나 자유로운 형식으로 기술한다.</para>
+			<sect2>
+				<title>고정 형식</title>
+				<para>일반적으로 가장 많이 사용하는 형식이다. 다중 언어 요소인 <code>fixed-format</code>아래에 <code>state,
+						city, street, postal-code</code> 요소들이 순서에 관계없이 나온다.</para>
+				<programco>
+					<program><![CDATA[
+		<address country-code="KR">
+			<fixed-format xml:lang="ko">
+				<state>경기도</state>
+				<city>성남시</city>
+				<street>분당구 정자동 10-3</street>
+				<postal-code>463-811</postal-code>
+			</fixed-format>
+			<fixed-format xml:lang="en">
+				<street>10-3, Jeongja-Dong, Bundang-Gu</street>
+				<city>Seongnam-Si</city>
+				<state>Gyeonggi-Do</state>
+				<postal-code>463-811</postal-code>
+			</fixed-format>
+		</address>]]></program>
+					<areaspec>
+						<area name="addr" coord="1"/>
+						<area name="format" coord="2"/>
+						<area name="state" coord="3"/>
+						<area name="city" coord="4"/>
+						<area name="street" coord="5"/>
+						<area name="postal" coord="6"/>
+						<area name="eaddr" coord="8"/>
+					</areaspec>
+					<callouts>
+						<callout area="addr">
+							<para>주소 요소. 국가 코드 속성을 가진다.</para>
+						</callout>
+						<callout area="format">
+							<para>고정 형식 요소. 다중 언어 요소이다. 여기에서 선언한 언어 코드가 자식 요소의 언어 코드를 결정한다.</para>
+						</callout>
+						<callout area="state">
+							<para>주 이름 요소</para>
+						</callout>
+						<callout area="city">
+							<para>도시 이름 요소</para>
+						</callout>
+						<callout area="street">
+							<para>거리명 요소</para>
+						</callout>
+						<callout area="postal">
+							<para>우편번호 요소</para>
+						</callout>
+						<callout area="eaddr">
+							<para>필요한 경우 별도 언어를 위한 고정 형식 요소를 추가 할 수 있다.</para>
+						</callout>
+					</callouts>
+				</programco>
+				<note>
+					<para>고정 형식의 자식 요소들이 순서가 없는 것은 나라별로 주소의 표기 순서가 다른 것을 감안한 것이다.</para>
+				</note>
+			</sect2>
+			<sect2>
+				<title>자유 형식</title>
+				<para>고정 형식으로 주소의 표기가 곤란한 경우 사용한다. 다중 언어 요소인 <code>free-format</code>요소의 아래에 자유롭게
+					필드명을 선언하고 기술할 수 있다. 국가나 서비스 별로 특이한 주소 형식을 기술하거나, 다음과 같이 좀 더 간단한 형식의 주소를 기술할 수도
+					있다.</para>
+				<program><![CDATA[
+		<address country-code="KR">
+			<free-format xml:lang="ko">
+				<field name="region">경기도</field>
+				<field name="detail">성남시 분당구 정자동 10-3</field>
+			</free-format>
+		</address>]]></program>
+			</sect2>
+		</sect1>
+		<sect1>
+			<title>연락처</title>
+			<para> 연락처는 단체 혹은 사람의 전화번호, 팩스, 홈페이지, 이메일 등 연락처 정보를 가진다. </para>
+			<programco>
+				<program><![CDATA[
+		<contact>
+			<phone type="office">031-555-2222</phone>
+			<phone type="mobile">010-777-1111</phone>
+			<fax>031-601-2222</fax>
+			<email>master@nplcc.com</email>
+			<homepage>http://www.nplcc.com</homepage>
+		</contact>]]></program>
+				<areaspec>
+					<area name="contact" coord="1"/>
+					<area name="phone" coord="2"/>
+					<area name="fax" coord="4"/>
+					<area name="email" coord="5"/>
+					<area name="hp" coord="6"/>
+				</areaspec>
+				<callouts>
+					<callout area="contact">
+						<para>골프장의 연락처 요소</para>
+					</callout>
+					<callout area="phone">
+						<para>전화번호. mobile, office, home등의 타입을 지정 한다. 생략하거나 하나 이상 나올 수 있다.</para>
+					</callout>
+					<callout area="fax">
+						<para>팩스번호. 생략 가능</para>
+					</callout>
+					<callout area="email">
+						<para>이메일 주소. 생략 가능</para>
+					</callout>
+					<callout area="hp">
+						<para>홈페이지 주소. 생략 가능</para>
+					</callout>
+				</callouts>
+			</programco>
+		</sect1>
+		<sect1>
+			<title>티 분류용 마커</title>
+			<para>골프장에서는 티의 난이도를 색깔이나 이름 등으로 분류하는데, 그 방식이 골프장마다 다른 경우가 많다. 따라서 MaumGDF에서는 골프장 정보 내에 티의 분류를 위한 이름을 <emphasis>티 마커( Tee Marker )</emphasis>라고 정해서 따로 선언하도록 하고 있다. 티 마커는 기본적으로 마커의 이름과 설명을 다중 언어 요소로 가지며, 선택적으로 등급 정보가 나온다.</para>
+			<programco>
+				<program><![CDATA[
+		<tee-markers>
+			<tee-marker sid="tee-marker-green">
+				<name xml:lang="ko">그린</name>
+				<name xml:lang="en">Green</name>
+				<desc xml:lang="ko">여성용 보다도 짧은 거리</desc>
+			</tee-marker>
+			<tee-marker sid="tee-marker-red">
+				<name xml:lang="ko">레드</name>
+				<name xml:lang="en">Red</name>
+				<desc xml:lang="ko">여성용</desc>
+			</tee-marker>
+			<tee-marker sid="tee-marker-white">
+				<name xml:lang="ko">화이트</name>
+				<name xml:lang="en">White</name>
+				<desc xml:lang="ko">남성용</desc>
+			</tee-marker>
+			<tee-marker sid="tee-marker-blue">
+				<name xml:lang="ko">블루</name>
+				<name xml:lang="en">Blue</name>
+				<desc xml:lang="ko">토너먼트의 챔피언쉽용</desc>
+			</tee-marker>			
+		</tee-markers>]]></program>
+				<areaspec>
+					<area name="tm" coord="1"/>
+					<area name="mar" coord="2"/>
+					<area name="name" coord="3"/>
+				</areaspec>
+				<callouts>
+					<callout area="tm">
+						<para>티 마커 리스트 요소. 자식으로 티 마커들을 가진다.</para>
+					</callout>
+					<callout area="mar">
+						<para>티 마커 요소. SID 속성을 가진다.</para>
+					</callout>
+					<callout area="name">
+						<para>티 마커의 이름. 다중 언어 요소이다.</para>
+					</callout>
+					<callout area="desc">
+						<para>티 마커에 대한 설명. 다중 언어 요소이다.</para>
+					</callout>
+				</callouts>
+			</programco>
+			<para>모든 골프장 정보에서는 위와 같이 골프장에서 사용하는 티 마커 정보를 꼭 명시해야 한다.</para>
+			<sect2>
+				<title>마커의 등급( Grade )</title>
+				<para>골프장 마다 서로 다른 티의 분류 방식 때문에 다양한 골프장에서 플레이한 결과를 합쳐서 통계를 내기가 곤란한 경우가 많다. 이를 위해 MaumGDF에서는 티 마커에 공통적인 등급( Grade )을 기술할 수 있게 하였다.
+				</para>
+				<para>이 등급은 표준화된 값이 아니라 작성자에 의해 임의로 정해진 값이다. 따라서 <code>grade</code> 요소의 <code>method</code> 속성에 등급 방식을 명기하고, 그 내용은 작성자의 책임하에 일관성 있는 값을 사용해야 한다.</para>
+				<program><![CDATA[						
+		<tee-markers>
+			<tee-marker sid="tee-marker-green">
+				<name xml:lang="ko">그린</name>
+				<desc xml:lang="ko">여성용 보다도 짧은 거리</desc>
+				<grade method="MaumGolf">80</grade>
+			</tee-marker>
+			<tee-marker sid="tee-marker-red">
+				<name xml:lang="ko">레드</name>
+				<desc xml:lang="ko">여성용</desc>
+				<grade method="MaumGolf">70</grade>
+			</tee-marker>
+			<tee-marker sid="tee-marker-white">
+				<name xml:lang="ko">화이트</name>
+				<desc xml:lang="ko">남성용</desc>
+				<grade method="MaumGolf">30</grade>
+			</tee-marker>
+			<tee-marker sid="tee-marker-blue">
+				<name xml:lang="ko">블루</name>
+				<desc xml:lang="ko">토너먼트의 챔피언쉽용</desc>
+				<grade method="MaumGolf">10</grade>
+			</tee-marker>			
+		</tee-markers>]]></program>
+				<para>예를 들어, 두 골프장에서 최고 난이도의 티를 각각 '블루', '챔피언' 이라는 다른 명칭을 쓰더라도, 같은 <code>grade</code> 를 가진다면 통계를 내기에 용이할 것이다.</para>
+				<para><code>grade</code> 요소는 필요한 경우 하나 이상 나올 수 있다.</para>
+			</sect2>
+		</sect1>
+		<sect1>
+			<title>골프 코스</title>
+			<para>골프장 안에 있는 골프 코스에 대한 정보를 담고 있다. 대개 골프장에는 하나 이상의 골프 코스가 있고, 각 코스는 9개 정도의 홀들로 이루어 지는 것이 보통이다.</para>
+			<para>골프 코스는 다음처럼 코스명과 티에 대한 평가, 그리고 개별 홀에 대한 정보를 가진다.</para>
+			<programco>
+				<program><![CDATA[
+	<golf-course sid="east-course" hole-count="9">
+		<name xml:lang="ko">동코스</name>
+		<tee-qualifications/>
+		<hole/>
+		<hole/>
+		<!-- ... -->
+	</golf-course>]]></program>
+				<areaspec>
+					<area name="course" coord="1"/>
+					<area name="name" coord="2"/>
+					<area name="quals" coord="3"/>
+					<area name="hole" coord="4"/>
+				</areaspec>
+				<callouts>
+					<callout area="course">
+						<para>골프 코스 요소. SID 와 홀의 갯수 속성이 있다.</para>
+					</callout>
+					<callout area="name">
+						<para>골프 코스의 이름. 다중 언어 요소이다.</para>
+					</callout>
+					<callout area="quals">
+						<para>골프 코스 내의 티 평가 리스트</para>
+					</callout>
+					<callout area="hole">
+						<para>개별 홀의 정보.</para>
+					</callout>
+				</callouts>
+			</programco>
+			<sect2>
+				<title>티 평가</title>
+				<para><emphasis>티 평가( Tee Qualification )</emphasis>는 골프 코스에 있는 티의 난이도를 비율( Rate )과 경사( Slope )로 나타낸다. 티 평가는 골프 코스와 티의 분류에 따라 달라지는 값이기에 MaumGDF 에서는 골프 코스 요소 밑의 <code>tee-qualifications</code>요소에 <emphasis>티 마커의 갯수만큼</emphasis> <code>tee-qualification</code> 요소가 나와 티 평가를 기술하게 된다.</para>
+				<programco>
+					<program><![CDATA[
+			<tee-qualifications>
+				<tee-qualification sid="tee-qualification-001" marker="#tee-marker-green">
+					<rating>69.4</rating>
+					<slope>120</slope>
+				</tee-qualification>
+				<tee-qualification sid="tee-qualification-001" marker="#tee-marker-red">
+					<rating>70.9</rating>
+					<slope>125</slope>
+				</tee-qualification>
+				<tee-qualification sid="tee-qualification-002" marker="#tee-marker-white">
+					<rating>72.8</rating>
+					<slope>135</slope>
+				</tee-qualification>
+				<tee-qualification sid="tee-qualification-001" marker="#tee-marker-blue">
+					<rating>73.5</rating>
+					<slope>138</slope>
+				</tee-qualification>
+			</tee-qualifications>]]></program>
+					<areaspec>
+						<area name="quals" coord="1"/>
+						<area name="qual" coord="2"/>
+						<area name="rating" coord="3"/>
+						<area name="slope" coord="4"/>
+					</areaspec>
+					<callouts>
+						<callout area="quals">
+							<para>티 종류별 티 평가를 가지는 리스트</para>
+						</callout>
+						<callout area="qual">
+							<para>티 평가 요소. SID 속성과 마커에 대한 참조를 가진다.</para>
+						</callout>
+						<callout area="rating">
+							<para>티의 비율</para>
+						</callout>
+						<callout area="slope">
+							<para>티의 경사</para>
+						</callout>
+					</callouts>
+				</programco>
+				<para>여기에서 기술한 티 평가는 홀 정보에 있는 개별 티 요소가 참조하게 된다.</para>
+			</sect2>
+			<sect2>
+				<title>홀 정보</title>
+				<para>골프 코스의 개별 홀에 대한 정보 요소. 그린과 티 정보를 자식으로 가진다.</para>
+				<programco>
+					<program><![CDATA[
+		<hole sid="hole-001">
+			<green/>
+			<green/>
+			<tee/>
+			<tee/>
+			<landing-area-position/>
+			<!-- ... -->
+		</hole>]]></program>
+					<areaspec>
+						<area name="hole" coord="1"/>
+						<area name="green" coord="2"/>
+						<area name="tee" coord="4"/>
+						<area name="lap" coord="6"/>
+					</areaspec>
+					<callouts>
+						<callout area="hole">
+							<para>홀 요소. SID속성이 있다.</para>
+						</callout>
+						<callout area="green">
+							<para>홀에 있는 그린 요소</para>
+						</callout>
+						<callout area="tee">
+							<para>홀에 있는 티 요소</para>
+						</callout>
+						<callout area="lap">
+							<para>랜딩 영역의 위치</para>
+						</callout>
+					</callouts>
+				</programco>
+				<para>홀에는 하나 이상의 그린이 있을 수 있고, 난이도 별로 다양한 티가 존재한다.</para>
+			</sect2>
+			<sect2>
+				<title>홀의 그린</title>
+				<para>SID 속성과 그린 내 홀컵의 위치 정보를 가질 수 있다.</para>
+				<programco>
+					<program><![CDATA[
+			<green sid="green-001">
+				<hole-cup-position>10 20 3</hole-cup-position>
+			</green>]]></program>
+					<areaspec>
+						<area name="green" coord="1"/>
+						<area name="holepos" coord="2"/>
+					</areaspec>
+					<callouts>
+						<callout area="green">
+							<para>그린 요소. SID속성이 있다.</para>
+						</callout>
+						<callout area="holepos">
+							<para>홀컵의 위치. 좌표값은 프로파일에서 선언된 좌표계를 따른다. 생략가능</para>
+						</callout>
+					</callouts>
+				</programco>
+			</sect2>
+			<sect2>
+				<title>홀의 티</title>
+				<para>각 홀에는 난이도 별로 다양한 티가 있다. 티 요소에는 SID와 골프 코스에서 선언한 티 평가에 대한 참조 속성이 있다. 자식으로는 파, 핸디 그리고 루트 요소가 나온다.</para>
+				<programco>
+					<program><![CDATA[
+			<tee sid="tee-001" qualification="#tee-qualification-001">
+				<par>3</par>
+				<handicap>15</handicap>
+				<route/>
+				<route/>
+			</tee>]]></program>
+					<areaspec>
+						<area name="tee" coord="1"/>
+						<area name="par" coord="2"/>
+						<area name="handi" coord="3"/>
+						<area name="route" coord="4"/>
+					</areaspec>
+					<callouts>
+						<callout area="tee">
+							<para>티 요소. SID 속성과 티 평가에 대한 참조 속성을 가진다.</para>
+						</callout>
+						<callout area="par">
+							<para>티의 파( Par ) 값</para>
+						</callout>
+						<callout area="handi">
+							<para>티의 핸디캡</para>
+						</callout>
+						<callout area="route">
+							<para>루트는 티에서 공략하는 그린에 대한 정보이다. 홀에 있는 그린의 갯수만큼 루트가 나온다.</para>
+						</callout>
+					</callouts>
+				</programco>
+			</sect2>
+			<sect2>
+				<title>티의 루트</title>
+				<para>홀에는 하나 이상의 그린과 티가 있을 수 있다. MaumGDF에서는 티 요소 밑의 루트( Route )요소로 어떤 티에서 어떤 그린을 공략하는지에 대한 정보를 나타낸다.</para>
+				<note>
+					<para>루트는 골프의 공식용어는 아니며, MaumGDF에서 티와 그린의 조합을 나타내기 위해 사용한다.</para>
+				</note>
+				<para>루트는 목표 그린과, 그 그린의 홀까지의 거리를 가진다.</para>
+				<programco>
+					<program><![CDATA[
+				<route sid="route-001" green="#green-001">
+					<distance>475</distance>
+				</route>]]></program>
+					<areaspec>
+						<area name="route" coord="1"/>
+						<area name="dist" coord="2"/>
+					</areaspec>
+					<callouts>
+						<callout area="route">
+							<para>루트 요소. 자신의 SID와 목표로 하는 그린의 SID 참조 속성이 있다.</para>
+						</callout>
+						<callout area="dist">
+							<para>티에서 목표 그린의 홀까지 거리</para>
+						</callout>
+					</callouts>
+				</programco>
+				<para>정의된 루트는 라운드 결과를 기록할 때 플레이어가 어떤 홀에서 어떤 그린을 공략했는지를 표시하는데 사용된다.</para>
+			</sect2>
+			<sect2>
+				<title>홀의 랜딩 영역 위치</title>
+				<para>홀의 랜딩 영역( Landing area )은 파4 이상의 홀에서 티샷, 세컨샷 후의 바람직한 공의 위치를 나타내는데 사용된다. 이 정보는 홀의 공략을 위해, 또는 비거리를 산출하는 등에 활용한다. 이 요소는 생략 가능하다.</para>
+				<programco>
+					<program><![CDATA[			
+			<landing-area-position>30 40 50</landing-area-position>
+			<landing-area-position>15 25 35</landing-area-position>]]></program>
+					<areaspec>
+						<area name="lap1" coord="1"/>
+						<area name="lap2" coord="2"/>
+					</areaspec>
+					<callouts>
+						<callout area="lap1">
+							<para>랜딩 영역의 위치. 좌표값은 프로파일에서 선언된 좌표계를 따른다.</para>
+						</callout>
+						<callout area="lap2">
+							<para>파 5홀의 경우 2개 존재한다.</para>
+						</callout>
+					</callouts>
+				</programco>
+				<note>
+					<para>랜딩 영역 위치는 IP( Intercross-section point ) 혹은 Angel point 등으로 불리기도 한다.</para>
+				</note>
+			</sect2>
+		</sect1>
+	</chapter>
+	<chapter>
+		<title>플레이어 정보</title>
+		<para>플레이어 정보에서는 플레이어의 신상 및 현재 핸디정보가 들어있다.</para>
+		<programco>
+			<program><![CDATA[
+	<player sid="haje01" gender="Male">
+		<full-name/>
+		<date-of-birth>1072-10-06</date-of-birth>
+		<current-handicap>8.6</current-handicap>
+		<address/>
+		<contact/>
+	</player>]]></program>
+			<areaspec>
+				<area name="player" coord="1"/>
+				<area name="fname" coord="2"/>
+				<area name="birthday" coord="3"/>
+				<area name="handicap" coord="4"/>
+				<area name="addr" coord="5"/>
+				<area name="contact" coord="6"/>
+			</areaspec>
+			<callouts>
+				<callout area="player">
+					<para>플레이어 요소. SID와 성별을 지정한다.</para>
+				</callout>
+				<callout area="fname">
+					<para>플레이어의 풀네임. 성과 이름을 나누어 표시하는 다중 언어 요소. 성과 이름의 구분이 힘든 경우 <code>name</code>요소로
+						대체할 수 있다.</para>
+				</callout>
+				<callout area="birthday">
+					<para>플레이어의 생일</para>
+				</callout>
+				<callout area="handicap">
+					<para>플레이어의 현재 핸디</para>
+				</callout>
+				<callout area="addr">
+					<para>플레이어의 주소 정보. 골프장의 주소 참고. 생략가능.</para>
+				</callout>
+				<callout area="contact">
+					<para>플레이어의 연락처 정보. 골프장의 연락처 참고</para>
+				</callout>
+			</callouts>
+		</programco>
+		<sect1>
+			<title>플레이어의 풀네임</title>
+			<para>풀네임은 성과 이름을 분리해서 표현하기 위하여 사용한다. 다중 언어 요소이기에 하나 이상의 언어로 명시할 수 있다.</para>
+			<programco>
+				<program><![CDATA[
+		<full-name xml:lang="ko">
+			<first-name>정주</first-name>
+			<surname>김</surname>
+		</full-name>
+		<full-name xml:lang="en">
+			<first-name>Jeong Ju</first-name>
+			<surname>Kim</surname>
+		</full-name>]]></program>
+				<areaspec>
+					<area name="name" coord="1"/>
+					<area name="fn" coord="2"/>
+					<area name="sn" coord="3"/>
+					<area name="ename" coord="5"/>
+				</areaspec>
+				<callouts>
+					<callout area="name">
+						<para>풀네임 요소. 다중 언어 요소이다.</para>
+					</callout>
+					<callout area="fn">
+						<para>플레이어의 이름에서 성을 제외한 부분</para>
+					</callout>
+					<callout area="sn">
+						<para>플레이어의 성</para>
+					</callout>
+					<callout area="ename">
+						<para>필요한 경우 별도 언어를 위한 풀네임 요소가 나온다.</para>
+					</callout>
+				</callouts>
+			</programco>
+			<para>
+				<code>first-name</code>과 <code>surname</code>은 순서에 상관없이 나올 수 있다. </para>
+		</sect1>
+	</chapter>
+	<chapter>
+		<title>라운드 정보</title>
+		<para>이제 실제 경기의 결과를 기록하기 위한 라운드 요소를 소개하겠다. 라운드 요소는 플레이어의 라운딩 관련 정보를 담고 있다.</para>
+		<para>다음은 라운드 요소의 간략한 구조이다.</para>
+		<programco>
+			<program><![CDATA[
+	<round sid="round-001" player="#haje01" country-club="#npl-country-club">
+		<weather>Sunny</weather>
+		<start-date-time>2010-07-10T13:43:11</start-date-time>
+		<reference/>
+		<hole-score/>
+	</round>]]></program>
+			<areaspec>
+				<area name="rnd" coord="1"/>
+				<area name="wea" coord="2"/>
+				<area name="dt" coord="3"/>
+				<area name="ref" coord="4"/>
+				<area name="hsco" coord="5"/>
+			</areaspec>
+			<callouts>
+				<callout area="rnd">
+					<para>라운드정보 요소. 라운드의 SID, 플레이어와 플레이한 골프장에 대한 SID 참조가 나온다.</para>
+				</callout>
+				<callout area="wea">
+					<para>라운드시 날씨. 가능한 값은 <link refid="scrf-weather">스키마 레퍼런스</link>를 참조한다.
+					생략가능하다.</para>
+				</callout>
+				<callout area="dt">
+					<para>라운드의 시작 일시를 표시한다. 선택적으로 종료 일시( <code>end-date-time</code> )를 표시할 수도
+					있다.</para>
+				</callout>
+				<callout area="ref">
+					<para>라운드가 참조하는 외부 정보를 표시한다. 루트 정보가 있는 경우는 사용하지 않는다.</para>
+				</callout>
+				<callout area="hsco">
+					<para>홀별 스코어 정보. 홀에서 플레이한 루트 정보가 함께 기록된다.</para>
+				</callout>
+			</callouts>
+		</programco>
+		<sect1>
+			<title>라운드 레퍼런스</title>
+			<para>라운드 레퍼런스는 골프 코스의 루트 정보가 없지만, 그 라운드에서 사용한 티 종류와 전/후 코스에 대해서는 알고 있는 경우에 사용한다. 라운드 레퍼런스에는 라운딩 중 사용한 티 마커에 대한 참조 속성을 가지고 전/후 코스에 대한 정보를 자식 요소로 가진다.</para>
+			<programco>
+				<program><![CDATA[
+		<reference marker="#tee-marker-green">
+			<front course="#course-001">
+				<name xml:lang="ko">동코스</name>
+			</front> 
+			<back course="#course-002">
+				<name xml:lang="ko">서코스</name>
+			</back>
+		</reference>]]></program>
+				<areaspec>
+					<area name="ref" coord="1"/>
+					<area name="front" coord="2"/>
+					<area name="fname" coord="3"/>
+					<area name="back" coord="5"/>
+					<area name="bname" coord="6"/>
+				</areaspec>
+				<callouts>
+					<callout area="ref">
+						<para>라운드 레퍼런스 요소. 라운드 동안 사용한 티 마커에 대한 참조 속성이 있다.</para>
+					</callout>
+					<callout area="front">
+						<para>라운드의 전 코스 정보. 생략 가능하다.</para>
+					</callout>
+					<callout area="fname">
+						<para>전 코스의 이름. 참고용으로 생략 가능하다. 다중 언어 요소이다.</para>
+					</callout>
+					<callout area="back">
+						<para>라운드의 후 코스 정보. 생략 가능하다.</para>
+					</callout>
+					<callout area="bname">
+						<para>후 코스의 이름. 참고용으로 생략 가능하다. 다중 언어 요소이다.</para>
+					</callout>
+				</callouts>
+			</programco>
+			<note>
+				<title>라운드 레퍼런스 정보와 루트 정보</title>
+				<para>라운드 레퍼런스와 루트는 둘 중 하나만 사용하면 된다. 루트 정보를 사용할 수 있는 경우는 홀별 마커와 전/후 코스에 대한 정보를 루트를 통해 알아 낼 수가 있다. 루트 정보를 사용할 수 없는 경우에만 라운드 레퍼런스 요소를 통해 마커와 전/후 코스 정보를 명기한다.</para>
+			</note>			
+		</sect1>
+		<sect1>
+			<title>홀 스코어</title>
+			<para>라운드에서 플레이한 홀별 스코어 정보.</para>
+			<programco>
+				<program><![CDATA[
+			<hole-score route="#route-001">
+				<shots>6</shots>
+				<putts>2</putts>
+				<statistics/>
+				<shot-detail/>
+			</hole-score>]]></program>
+				<areaspec>
+					<area name="hole" coord="1"/>
+					<area name="shots" coord="2"/>
+					<area name="putts" coord="3"/>
+					<area name="stat" coord="4"/>
+					<area name="shot-detail" coord="5"/>
+				</areaspec>
+				<callouts>
+					<callout area="hole">
+						<para>홀 스코어 요소. 홀에서 플레이한 루트의 SID 참조 속성이 있다.( 라운드 레퍼런스 요소가 있을 때 생략 가능 )</para>
+					</callout>
+					<callout area="shots">
+						<para>이 홀의 샷 횟수</para>
+					</callout>
+					<callout area="putts">
+						<para>이 홀의 퍼팅 횟수</para>
+					</callout>
+					<callout area="stat">
+						<para>이 홀에 대한 통계 정보</para>
+					</callout>
+					<callout area="shot-detail">
+						<para>이 홀의 개별 샷에 대한 상세 정보</para>
+					</callout>
+				</callouts>
+			</programco>
+			<sect2>
+				<title>통계</title>
+				<para>홀의 통계 요소는 상세 샷 정보로 부터 산출할 수 있으나 편의상 필요한 통계 정보를 미리 기록해 두기 위해서 사용한다.</para>
+				<programco>
+					<program><![CDATA[
+				<statistics>
+					<fairway-hit>True</fairway-hit>
+					<gir>False</gir>
+					<sand-save>N/A</sand-save>
+				</statistics>]]></program>
+					<areaspec>
+						<area name="stat" coord="1"/>
+						<area name="fair" coord="2"/>
+						<area name="green" coord="3"/>
+						<area name="sand" coord="4"/>
+					</areaspec>
+					<callouts>
+						<callout area="stat">
+							<para>통계요소.</para>
+						</callout>
+						<callout area="fair">
+							<para>이 홀의 첫번째 샷이 페어웨이에 안착했는지 여부. 가능한 값은 True, False, N/A 중 하나이다.</para>
+						</callout>
+						<callout area="green">
+							<para>이 홀에서 그린에 규정 내 타수로 안착했는지 여부. Green In Regulation의 약자이다. 가능한 값은 True, False, N/A 중 하나이다.</para>
+						</callout>
+						<callout area="sand">
+							<para>이 홀에서 샌드 세이브 여부. 가능한 값은 가능한 값은 True, False, N/A 중 하나이다.</para>
+						</callout>
+					</callouts>
+				</programco>
+			</sect2>
+			<sect2>
+				<title>샷 세부 정보</title>
+				<para>개별 샷 정보를 자식으로 가진다.</para>
+				<programco>
+					<program><![CDATA[
+				<shot-detail>
+					<shot/>
+					<!-- ... -->
+				</shot-detail>]]></program>
+					<areaspec>
+						<area name="detail" coord="1"/>
+						<area name="shot" coord="2"/>
+					</areaspec>
+					<callouts>
+						<callout area="detail">
+							<para>샷 세부 정보 요소.</para>
+						</callout>
+						<callout area="shot">
+							<para>샷 정보 요소. 샷의 수만큼 반복해서 나온다.</para>
+						</callout>
+					</callouts>
+				</programco>
+			</sect2>
+			<sect2>
+				<title>샷 정보</title>
+				<para>개별 샷에 대한 정보. 사용한 클럽의 종류나 시작 위치, 스윙 방법 등 샷에 대한 상세 정보가 담겨져 있다.</para>
+				<programco>
+					<program><![CDATA[
+					<shot>
+						<club/>
+						<start-position>20 40 1</start-position>
+						<starting>Tee Box</starting>
+						<swing>Full Swing</swing>
+						<shot-result>Good</shot-result>
+						<flying>Straight</flying>
+						<landing>Fairway</landing>
+						<penalty>1</penalty>
+					</shot>]]></program>
+					<areaspec>
+						<area name="shot" coord="1"/>
+						<area name="club" coord="2"/>
+						<area name="pos" coord="3"/>
+						<area name="start" coord="4"/>
+						<area name="swing" coord="5"/>
+						<area name="shotresult" coord="6"/>
+						<area name="fly" coord="7"/>
+						<area name="land" coord="8"/>
+						<area name="penl" coord="9"/>
+					</areaspec>
+					<callouts>
+						<callout area="shot">
+							<para>샷 정보 요소.</para>
+						</callout>
+						<callout area="club">
+							<para>사용한 클럽 정보 요소.</para>
+						</callout>
+						<callout area="pos">
+							<para>샷을 시작한 위치 좌표. 프로파일의 좌표계를 따른다. 생략 가능.</para>
+						</callout>
+						<callout area="start">
+							<para>샷을 시작한 위치 타입. 가능한 값은 <link refid="scrf-position">스키마 레퍼런스</link>를
+								참조한다. 생략 가능.</para>
+						</callout>
+						<callout area="swing">
+							<para>스윙 타입. 가능한 값은 <link refid="scrf-swing">스키마 레퍼런스</link>를
+							참조한다.</para>
+						</callout>
+						<callout area="shotresult">
+							<para>공 타격 타입. 가능한 값은 <link refid="scrf-shot-result">스키마 레퍼런스</link>를
+							참조한다.</para>
+						</callout>
+						<callout area="fly">
+							<para>공의 진행 방향 타입. 가능한 값은 <link refid="scrf-flying">스키마 레퍼런스</link>를
+								참조한다.</para>
+						</callout>
+						<callout area="land">
+							<para>공이 멈춘 위치 타입. 가능한 값은 <link refid="scrf-position">스키마 레퍼런스</link>를
+								참조한다.</para>
+						</callout>
+						<callout area="penl">
+							<para>이번 샷에서 받은 벌타 수. 생략 가능</para>
+						</callout>
+					</callouts>
+				</programco>
+			</sect2>
+			<sect2>
+				<title>샷의 클럽 정보</title>
+				<para>샷을 할때 사용한 클럽의 정보이다.</para>
+				<programco>
+					<program><![CDATA[
+						<club type="driver">]]></program>
+					<areaspec>
+						<area name="club" coord="1"/>
+					</areaspec>
+					<callouts>
+						<callout area="club">
+							<para>클럽 요소. 타입 속성을 필요로 한다. 가능한 값은 <link refid="scrf-type-club-type">스키마 레퍼런스</link>를 참조한다.</para>
+						</callout>
+					</callouts>
+				</programco>
+				<para>클럽의 타입에 따라 필요한 경우 헤드번호( headnum ), 로프트각도( loftangle ), 닉네임( nickname )속성을 지정할 수 있다.</para>
+				<program><![CDATA[
+						<club type="wedge" nickname="Sand" loftangle="48"/>
+						]]></program>
+				<para><code>headnum, loftangle</code> 속성은 정수로 기술하고, <code>nickname</code> 속성은 문자열로 기술한다.</para>
+				<para>만약 사용한 샷에 대해 브랜드나 모델명 등 더 자세한 정보를 담고 싶다면 커스텀 속성을 사용할 수 있다. 다음처럼 <code>custom-properties</code> 요소로 기입한다.</para>
+				<programco>
+					<program><![CDATA[
+						<club type="driver">
+							<custom-properties>
+								<property name="brand">Taylormade</property>
+								<property name="model">r7</property>
+							</custom-properties>
+						</club>]]></program>
+					<areaspec>
+						<area name="driver" coord="3"/>
+					</areaspec>
+					<callouts>
+						<callout area="driver">
+							<para>사용한 클럽의 브랜드나 모델명 같은 상세 정보를 커스텀 속성으로 기입하였다.</para>
+						</callout>
+					</callouts>
+				</programco>
+				<note>
+					<title>커스텀 속성의 사용</title>
+					<para>커스텀 속성은 서비스별로 특화된 정보를 담을 때 유용하다. 클럽뿐만 아니라 골프장, 플레이어 정보 등에도 사용할 수 있으니, 자세한 것은 <link	refid="scrf-custom-properties">스키마 레퍼런스</link>를 참조하자.</para>
+				</note>
+			</sect2>
+		</sect1>
+	</chapter>
+	<chapter>
+		<title>예제들</title>
+		<para>이번 장에서는 위에서 설명한 구조에 따라 작성된 예제를 몇가지 소개하겠다.</para>
+		<sect1>
+			<title>골프장, 플레이어 그리고 라운딩 정보가 같이 있는 예제</title>
+			<para>
+				<program><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
+<?oxygen RNGSchema="../schemas/gdf.rng" type="xml"?>
+<gdf version="0.2">
+	<!-- 이 데이터에 대한 세부정보 -->
+	<profile name="GDS">
+		<created>2010-08-11T10:50:13</created>
+		<coordinate-system distance-units="meters">
+			<cartesian orientation="Left Handed" up-axis="Y"/>
+		</coordinate-system>
+	</profile>
+
+	<!-- 골프클럽( 골프장 ) 정보 -->
+	<country-club sid="npl-country-club" updated="20110401">
+		<name xml:lang="ko">NPL 컨트리 클럽</name>
+		<name xml:lang="en">NPL Country Club</name>
+		<short-name xml:lang="ko">NPL CC</short-name>
+		<short-name xml:lang="en">NPL CC</short-name>
+		<address country-code="KR">
+			<fixed-format xml:lang="ko">
+				<state>경기도</state>
+				<city>성남시</city>
+				<street>분당구 정자동 10-3</street>
+				<postal-code>463-811</postal-code>
+			</fixed-format>
+			<fixed-format xml:lang="en">
+				<street>Jeongja-Dong, Bundang-Gu</street>
+				<city>Seongnam-Si</city>
+				<state>Gyeonggi-Do</state>
+				<postal-code>463-811</postal-code>
+			</fixed-format>
+			<!-- Alternative Way
+			<free-format>
+				<field name="state">경기도</field>
+				<field name="city">성남시</field>
+				<field name="street">분당구 정자동 10-3</field>
+				<field name="postal-code">463-811</field>
+			</free-format>			
+			-->
+		</address>
+		<contact>
+			<phone type="office">031-555-3333</phone>
+			<fax>031-601-2222</fax>
+			<email>master@nplcc.com</email>
+			<homepage>http://www.nplcc.com</homepage>
+		</contact>
+		<tee-markers>
+			<tee-marker sid="tee-marker-green">
+				<name xml:lang="ko">그린</name>
+				<name xml:lang="en">Green</name>
+				<desc xml:lang="ko">여성용 보다도 짧은 거리</desc>
+				<grade method="NPLUTO">80</grade>
+			</tee-marker>
+			<tee-marker sid="tee-marker-red">
+				<name xml:lang="ko">레드</name>
+				<name xml:lang="en">Red</name>
+				<desc xml:lang="ko">여성용</desc>
+				<grade method="NPLUTO">70</grade>
+			</tee-marker>
+			<tee-marker sid="tee-marker-white">
+				<name xml:lang="ko">화이트</name>
+				<name xml:lang="en">White</name>
+				<desc xml:lang="ko">남성용</desc>
+				<grade method="NPLUTO">30</grade>
+			</tee-marker>
+			<tee-marker sid="tee-marker-blue">
+				<name xml:lang="ko">블루</name>
+				<name xml:lang="en">Blue</name>
+				<desc xml:lang="ko">토너먼트의 챔피언쉽용</desc>
+				<grade method="NPLUTO">10</grade>
+			</tee-marker>			
+		</tee-markers>		
+		<golf-course sid="course-001" hole-count="9">
+			<name xml:lang="ko">동코스</name>
+			<tee-qualifications>
+				<tee-qualification sid="tee-qualification-green" marker="#tee-marker-green">
+					<rating>69.4</rating>
+					<slope>120</slope>
+				</tee-qualification>
+				<tee-qualification sid="tee-qualification-red" marker="#tee-marker-red">
+					<rating>70.9</rating>
+					<slope>125</slope>
+				</tee-qualification>
+				<tee-qualification sid="tee-qualification-white" marker="#tee-marker-white">
+					<rating>72.8</rating>
+					<slope>135</slope>
+				</tee-qualification>
+				<tee-qualification sid="tee-qualification-blue" marker="#tee-marker-blue">
+					<rating>73.5</rating>
+					<slope>138</slope>
+				</tee-qualification>
+			</tee-qualifications>
+			<hole sid="hole-001">
+				<green sid="green-001">
+					<hole-cup-position>10 20 3</hole-cup-position>
+				</green>
+				<green sid="green-002">
+					<hole-cup-position>20 90 8</hole-cup-position>
+				</green>
+				<tee sid="tee-001" qualification="#tee-qualification-green">
+					<par>3</par>
+					<handicap>13</handicap>
+					<route sid="route-001" green="#green-001">
+						<distance>475</distance>
+					</route>
+					<route sid="route-002" green="#green-002">
+						<distance>500</distance>
+					</route>
+				</tee>
+				<tee sid="tee-002" qualification="#tee-qualification-red">
+					<par>3</par>
+					<handicap>13</handicap>
+					<route sid="route-003" green="#green-001">
+						<distance>500</distance>
+					</route>
+					<route sid="route-004" green="#green-002">
+						<distance>520</distance>
+					</route>
+				</tee>
+				<tee sid="tee-002" qualification="#tee-qualification-white">
+					<par>4</par>
+					<handicap>15</handicap>
+					<route sid="route-003" green="#green-001">
+						<distance>510</distance>
+					</route>
+					<route sid="route-004" green="#green-002">
+						<distance>530</distance>
+					</route>
+				</tee>
+				<tee sid="tee-002" qualification="#tee-qualification-blue">
+					<par>4</par>
+					<handicap>15</handicap>
+					<route sid="route-003" green="#green-001">
+						<distance>520</distance>
+					</route>
+					<route sid="route-004" green="#green-002">
+						<distance>540</distance>
+					</route>
+				</tee>
+				<landing-area-position>30 40 50</landing-area-position>
+				<landing-area-position>15 25 35</landing-area-position>
+			</hole>
+			<hole sid="hole-002">
+				<green sid="green-003">
+					<hole-cup-position>10 20 3</hole-cup-position>
+				</green>
+				<green sid="green-004">
+					<hole-cup-position>20 90 8</hole-cup-position>
+				</green>
+				<tee sid="tee-003" qualification="#tee-qualification-green">
+					<par>3</par>
+					<handicap>13</handicap>
+					<route sid="route-005" green="#green-003">
+						<distance>475</distance>
+					</route>
+					<route sid="route-006" green="#green-004">
+						<distance>500</distance>
+					</route>
+				</tee>
+				<tee sid="tee-004" qualification="#tee-qualification-red">
+					<par>3</par>
+					<handicap>13</handicap>
+					<route sid="route-007" green="#green-003">
+						<distance>500</distance>
+					</route>
+					<route sid="route-008" green="#green-004">
+						<distance>520</distance>
+					</route>
+				</tee>
+				<tee sid="tee-004" qualification="#tee-qualification-white">
+					<par>4</par>
+					<handicap>15</handicap>
+					<route sid="route-007" green="#green-003">
+						<distance>510</distance>
+					</route>
+					<route sid="route-008" green="#green-004">
+						<distance>530</distance>
+					</route>
+				</tee>
+				<tee sid="tee-004" qualification="#tee-qualification-blue">
+					<par>4</par>
+					<handicap>15</handicap>
+					<route sid="route-007" green="#green-003">
+						<distance>520</distance>
+					</route>
+					<route sid="route-008" green="#green-004">
+						<distance>540</distance>
+					</route>
+				</tee>
+			</hole>
+			<!-- ... -->
+		</golf-course>
+	</country-club>
+
+	<!-- 플레이어 정보 -->
+	<player sid="haje01" gender="Male">
+		<full-name xml:lang="ko">
+			<first-name>정주</first-name>
+			<surname>김</surname>
+		</full-name>
+		<full-name xml:lang="en">
+			<first-name>Jeong Ju</first-name>
+			<surname>Kim</surname>
+		</full-name>
+		<date-of-birth>2010-10-10</date-of-birth>
+		<current-handicap>8.6</current-handicap>
+		<contact>
+			<email>haje01@npluto.com</email>
+		</contact>
+	</player>
+
+	<!-- 라운드 정보 -->
+	<round sid="round-001" player="#haje01" country-club="#npl-country-club">
+		<weather>Sunny</weather>
+		<start-date-time>2010-07-10T13:43:11</start-date-time>
+		<!-- 실제로는 루트 정보를 사용할 수 없는 경우에 한해 기술한다. -->
+		<reference marker="#tee-marker-green">
+			<front course="#course-001">
+				<name xml:lang="ko">동코스</name>
+			</front> 
+			<back course="#course-002">
+				<name xml:lang="ko">서코스</name>
+			</back>
+		</reference>
+		<hole-score route="#route-001">
+			<shots>6</shots>
+			<putts>2</putts>
+			<statistics>
+				<fairway-hit>True</fairway-hit>
+				<gir>False</gir>
+				<sand-save>N/A</sand-save>
+			</statistics>			
+			<shot-detail>
+				<shot>
+					<club type="driver">
+						<custom-properties>
+							<property name="brand">Taylormade</property>
+							<property name="model">r7</property>
+						</custom-properties>
+					</club>
+					<start-position>20 40 1</start-position>
+					<starting>Tee Box</starting>
+					<swing>Full Swing</swing>
+					<shot-result>Good</shot-result>
+					<flying>Straight</flying>
+					<landing>Fairway</landing>
+				</shot>
+				<shot>
+					<club type="wood" headnum="3"/>
+					<swing>Full Swing</swing>
+					<shot-result>Good</shot-result>
+					<flying>Hook</flying>
+					<landing>Fairway</landing>
+				</shot>
+				<shot>
+					<club type="iron" headnum="6"/>
+					<swing>Full Swing</swing>
+					<shot-result>Miss</shot-result>
+					<flying>Draw</flying>
+					<landing>Fairway Bunker</landing>
+				</shot>
+				<shot>
+					<club type="wedge" nickname="Sand" loftangle="48"/>
+					<swing>Toss And Roll</swing>
+					<shot-result>Good</shot-result>
+					<flying>Straight</flying>
+					<landing>Green</landing>
+				</shot>
+				<shot>
+					<club type="putter"/>
+					<swing>Toss And Roll</swing>
+					<shot-result>Good</shot-result>
+					<flying>Pull</flying>
+					<landing>Green</landing>
+				</shot>
+				<shot>
+					<club type="putter"/>
+					<swing>Toss And Roll</swing>
+					<shot-result>Good</shot-result>
+					<flying>Straight</flying>
+					<landing>Hole</landing>
+				</shot>
+			</shot-detail>
+		</hole-score>		
+		<hole-score route="#route-003">
+			<shots>1</shots>
+			<putts>0</putts>
+			<statistics>
+				<fairway-hit>True</fairway-hit>
+				<gir>False</gir>
+				<sand-save>N/A</sand-save>
+			</statistics>
+			<shot-detail>
+				<shot>
+					<club type="wedge" nickname="Sand" loftangle="50"/>
+					<swing>Full Swing</swing>
+					<shot-result>Good</shot-result>
+					<flying>Straight</flying>
+					<landing>Hole</landing>
+				</shot>
+			</shot-detail>
+		</hole-score>
+	</round>
+</gdf>
+]]>
+				</program>
+			</para>
+		</sect1>
+	</chapter>
+	<xi:include href="schema-reference.xml" xpointer="schema-reference"/>
+	<appendix>
+		<title>MaumGDF 소스 활용하기</title>
+		<para>여기에서는 프로그래머들을 위해 직접 MaumGDF의 소스를 내려 받아 활용하는 방법을 소개한다.</para>
+		<note>
+			<title>MaumGDF 개발 페이지</title>
+			<para>MaumGDF는 GitHub를 사용해 개발되고 있다. 프로젝트 페이지는 다음과 같다.</para>
+			<para>
+				<link url="https://github.com/haje01/maumgdf.git">https://github.com/haje01/maumgdf.git</link>
+			</para>
+		</note>
+		<sect1>
+			<title>준비</title>
+			<sect2>
+				<title>소스관리 툴</title>
+				<para>MaumGDF의 소스관리 툴은 Git을 사용하고 있다. 머큐리얼에 대한 자세한 내용 및 프로그램 다운로드는 머큐리얼
+					홈페이지 ( <link url="http://git-scm.com/">http://git-scm.com/</link> ) 를 참고하자.</para>
+			</sect2>
+			<sect2>
+				<title>소스 받기</title>
+				<para>Git을 통해 다음과 같이 MaumGDF의 소스를 받을 수 있다.</para>
+				<program><![CDATA[git clone https://github.com/haje01/maumgdf.git]]></program>
+				<para>내려받은 폴더의 구조는 다음과 같을 것이다.</para>
+				<programco>
+					<program><![CDATA[
+2010-08-02  오후 06:57    <DIR>          .hg
+2010-08-03  오전 11:26    <DIR>          documents
+2010-07-28  오후 12:00    <DIR>          examples
+2010-07-29  오전 11:48             1,242 Makefile.win
+2010-07-28  오전 11:59               627 MaumGDF.xpr
+2010-07-29  오후 04:45    <DIR>          pdf
+2010-08-02  오후 05:52    <DIR>          schemas
+2010-07-29  오후 05:14    <DIR>          temp]]></program>
+					<areaspec>
+						<area name="doc" coord="2"/>
+						<area name="exam" coord="3"/>
+						<area name="pdf" coord="6"/>
+						<area name="schemas" coord="7"/>
+					</areaspec>
+					<callouts>
+						<callout area="doc">
+							<para>문서 폴더</para>
+						</callout>
+						<callout area="exam">
+							<para>예제 폴더</para>
+						</callout>
+						<callout area="pdf">
+							<para>생성된 PDF 폴더</para>
+						</callout>
+						<callout area="schemas">
+							<para>스키마 폴더</para>
+						</callout>
+					</callouts>
+				</programco>
+			</sect2>
+			<sect2>
+				<title>XML 툴</title>
+				<para>XML이 문법에 맞게 작성되었는지를 검사하기 위한 가장 좋은 방밥은 그 XML포맷의 스키마를 통해서 검증하는 것이다. MaumGDF 소스
+					폴더의 <code>schemas\</code>폴더에는 다음과 같은 스키마가 있다.</para>
+				<program><![CDATA[
+2010-08-03  오후 06:42            49,591 gdf.rng
+2010-08-03  오전 09:38            93,295 gdf.xsd
+2010-08-03  오전 09:38               288 xml.xsd]]></program>
+				<para>인터넷을 찾아 보면 XML 스키마의 검증을 지원하는 여러가지 툴이 있다. 여기에서는 검증을 위해 libxml 라이브러리와 xmllint라는
+					툴을 사용하겠다. 윈도우용 libxml 바이너리를 <link url="http://www.zlatkovic.com/libxml.en.html"
+						>http://www.zlatkovic.com/libxml.en.html</link> 에서 받은 뒤, libxml 라이브러리와 포함되어
+					있는 xmllint.exe가 커맨드창에서 호출되도록 설치하면 XML을 검증할 수 있다.</para>
+			</sect2>
+		</sect1>
+		<sect1>
+			<title>활용</title>
+			<sect2>
+				<title>스키마를 통한 데이터 검증</title>
+				<para> 예를 들어 MaumGDF가 설치된 폴더에서 <code>examples\</code>폴더에 있는
+					<code>example1.xml</code> 파일은 다음처럼 검증할 수 있다.</para>
+				<program><![CDATA[xmllint.exe --noout --relaxng schemas\gdf.rng examples\example1.xml]]></program>
+				<para>정상적으로 검증에 성공하면 다음과 같은 메세지가 나온다.</para>
+				<program><![CDATA[examples\example1.xml validates]]></program>
+			</sect2>
+			<sect2>
+				<title>XML에디터 사용</title>
+				<para>XML 스키마가 지원되는 XML편집기를 사용하면 문법에 맞는 XML을 Inteli-Sense기능으로 편리하게 작성할 수 있다. 대표적인
+					XML에디터인 Oxygen ( <link url="http://www.oxygenxml.com/"
+					>http://www.oxygenxml.com/</link> )을 사용한다면 다음처럼 스키마를 지정하고</para>
+				<image src="../images/applyschema.png" width="60%" caption="스키마 설정" align="center"/>
+				<para>Inteli-Sense 기능을 이용하여 편리하게 MaumGDF XML 문서를 편집할 수 있다.</para>
+				<image src="images/oxygenedit.png" width="90%" caption="스키마에 맞게 편집" align="center"/>
+				<para>XSD Schema를 지원하는 편집기를 사용하는 경우 <code>schemas\</code> 폴더 밑의
+					<code>gdf.xsd</code>를 사용하면 된다.</para>
+			</sect2>
+		</sect1>
+	</appendix>
+</book>

@@ -1,0 +1,48 @@
+# externals
+XSLTPROC=$(BOOKML)\win32util\xsltproc.exe
+XSLT_PARAM=--xinclude --xincludestyle
+TRANG=$(BOOKML)\util\trang.jar
+XMLLINT=$(BOOKML)\win32util\xmllint.exe
+XMLLINT_PARAM=--relaxng $(BOOKML)\schema\bookml.rng --noout --xinclude
+FO_XSL=$(BOOKML)\stylesheet\fo.xsl
+SCHEMA_REFERENCE_XSL=$(BOOKML)\stylesheet\schema-reference.xsl
+BOOKML_CFG_DIR=$(BOOKML)\config
+FO_RDIR=temp
+PDF_RDIR=pdf
+FO_DIR=$(CURDIR)\$(FO_RDIR)
+PDF_DIR=$(CURDIR)\$(PDF_RDIR)
+SCHEMA_RNG=$(CURDIR)\schemas\gdf.rng
+SCHEMA_RXSD=schemas\gdf.xsd
+SCHEMA_XSD=$(CURDIR)\$(SCHEMA_RXSD)
+FOP_CFG=$(KF4FOP)\fop-conf.xml
+RM=del
+
+# internals
+LANGS=ko
+DOC_NAME=makegdf
+DOC_TYPE_NAME=manual
+SCHEMA_NAME=MakeGDF
+VERSION=0.1
+
+export XSLTPROC XSLT_PARAM XMLLINT XMLLINT_PARAM FO_XSL FO_DIR PDF_DIR FOP_CFG LANGS BOOKML_CFG_DIR DOC_NAME SCHEMA_NAME VERSION SCHEMA_RNG SCHEMA_REFERENCE_XSL DOC_TYPE_NAME
+
+all: schema document
+
+schema: $(SCHEMA_XSD)
+
+$(SCHEMA_XSD): $(SCHEMA_RNG)
+	java -jar $(TRANG) -I rng -O xsd $(SCHEMA_RNG) $(SCHEMA_XSD)
+
+document:
+	cd documents && $(MAKE) all
+
+clean: 
+	@cd $(FO_RDIR) && $(RM) *.fo
+	@cd $(PDF_RDIR) && $(RM) *.pdf
+	@$(RM) $(SCHEMA_RXSD)
+	@cd documents && $(MAKE) clean
+
+.PHONY: all test document clean
+
+
+
